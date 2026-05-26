@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>施工事例 ｜ 株式会社シゲ電気</title>
+<meta name="description" content="オフィスビル、商業施設、集合住宅、改修工事まで。シゲ電気の代表的な施工事例をご紹介します。">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="images/logo.svg" alt="" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>SHIGE DENKI</motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="index.html" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="services.html" className={isActive('services')}>対応工事</a>
+        <a href="works.html" className={isActive('works')}>施工事例</a>
+        <a href="company.html" className={isActive('company')}>会社情報</a>
+        <a href="recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function PageHero({ image, label, title, sub, breadcrumb }) {
+  return (
+    <>
+      <section className="page-hero">
+        <div className="page-hero__bg">
+          <motion.img src={image} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.9 }}>{label}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            dangerouslySetInnerHTML={{ __html: title }} />
+          {sub && <motion.p className="page-hero__sub"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 1.0 }}>{sub}</motion.p>}
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{breadcrumb}</span>
+      </nav>
+    </>
+  );
+}
+
+function BottomCTA({ title }) {
+  return (
+    <section className="bottom-cta">
+      <FadeUp>
+        <div className="bottom-cta__label">─ Get in touch</div>
+        <h2 className="bottom-cta__title" dangerouslySetInnerHTML={{ __html: title || 'お見積もり・ご相談を、<br />お気軽に。' }} />
+        <a href="contact.html" className="btn-outline btn-outline--dark"><span>お問い合わせへ</span></a>
+      </FadeUp>
+    </section>
+  );
+}
+
+
+/* ========== Works Data (injected by build script) ========== */
+/*__WORKS_DATA__*/
+
+function WorksPage() {
+  const [filter, setFilter] = useState('all');
+  const filters = [
+    { id: 'all', label: 'ALL' },
+    { id: 'commercial', label: '商業施設' },
+    { id: 'office', label: 'オフィス' },
+    { id: 'residential', label: '集合住宅' },
+    { id: 'renovation', label: '改修工事' },
+  ];
+  const filtered = filter === 'all' ? works : works.filter(w => w.type === filter);
+
+  return (
+    <>
+      <PageHero
+        image="images/pagehead-works.jpg"
+        label="WORKS"
+        title="現場が、すべてを<br />物語っています。"
+        sub="アクシスジャパン様12年、ドラフト様10年。長くお取引いただく元請け様の現場を、一つひとつ大切に重ねてきました。"
+        breadcrumb="施工事例" />
+
+      <section className="section">
+        <FadeUp>
+          <p className="section__lead">
+            こちらは代表的な施工事例の一部です。守秘義務の関係で詳細を控えさせていただく案件も多数ございます。<br />
+            類似事例についてのお問い合わせもお気軽にどうぞ。
+          </p>
+        </FadeUp>
+
+        <FadeUp delay={0.1}>
+          <div className="work-filter">
+            {filters.map(f => (
+              <button key={f.id}
+                className={'work-filter__btn ' + (filter === f.id ? 'active' : '')}
+                onClick={() => setFilter(f.id)}>
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </FadeUp>
+
+        <AnimatePresence mode="wait">
+          <motion.div className="works-grid" key={filter}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}>
+            {filtered.map((w, i) => (
+              <motion.div key={w.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}>
+                <a href={`works/${w.slug}.html`} className="work-card">
+                  <div className="work-card__photo">
+                    <div className="work-card__tag">{w.tag}</div>
+                    <img src={w.img} alt={w.title} loading="lazy" />
+                  </div>
+                  <h3 className="work-card__title">{w.title}</h3>
+                  <div className="work-card__meta">
+                    {w.meta.map((m, j) => <span key={j}>{m}</span>)}
+                  </div>
+                </a>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        <div className="clients">
+          <FadeUp>
+            <div className="clients__label">Long-term partners</div>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <div className="clients__list">
+              <div className="client"><span className="client__name">アクシスジャパン様</span><span className="client__years">12 years</span></div>
+              <div className="client"><span className="client__name">ドラフト様</span><span className="client__years">10 years</span></div>
+              <div className="client"><span className="client__name">アイデックス様</span><span className="client__years">4 years</span></div>
+              <div className="client"><span className="client__name">他 中小企業 10社以上</span></div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      <BottomCTA title="類似事例のご相談、<br />お見積もりはお気軽に。" />
+    </>
+  );
+}
+
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2200);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>{loading && <LoadingScreen key="loader" />}</AnimatePresence>
+      <Header current="works" />
+      <main><WorksPage /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

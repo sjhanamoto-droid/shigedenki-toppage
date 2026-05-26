@@ -1,0 +1,8 @@
+{
+  "buildCommand": "node scripts/build-works.mjs",
+  "outputDirectory": ".",
+  "framework": null,
+  "rewrites": [
+    { "source": "/works/:slug", "destination": "/works/:slug.html" }
+  ]
+}

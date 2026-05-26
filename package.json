@@ -1,0 +1,13 @@
+{
+  "name": "shigedenki-toppage",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-works.mjs"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.0",
+    "dotenv": "^16.4.0"
+  }
+}

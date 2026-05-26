@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>対応工事 ｜ 株式会社シゲ電気</title>
+<meta name="description" content="総合電気・弱電・防災・空調・ダクト・施工管理・設計施工・図面作成。電気工事8工種を自社対応で完結します。">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="images/logo.svg" alt="" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>SHIGE DENKI</motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="index.html" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="services.html" className={isActive('services')}>対応工事</a>
+        <a href="works.html" className={isActive('works')}>施工事例</a>
+        <a href="company.html" className={isActive('company')}>会社情報</a>
+        <a href="recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function CountUp({ to, duration = 2 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  useEffect(() => {
+    if (!inView) return;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(to * eased));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, to, duration]);
+  return <span ref={ref}>{count}</span>;
+}
+
+function PageHero({ image, label, title, sub, breadcrumb }) {
+  return (
+    <>
+      <section className="page-hero">
+        <div className="page-hero__bg">
+          <motion.img src={image} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.9 }}>{label}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            dangerouslySetInnerHTML={{ __html: title }} />
+          {sub && <motion.p className="page-hero__sub"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 1.0 }}>{sub}</motion.p>}
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{breadcrumb}</span>
+      </nav>
+    </>
+  );
+}
+
+function BottomCTA({ title }) {
+  return (
+    <section className="bottom-cta">
+      <FadeUp>
+        <div className="bottom-cta__label">─ Get in touch</div>
+        <h2 className="bottom-cta__title" dangerouslySetInnerHTML={{ __html: title || 'お見積もり・ご相談を、<br />お気軽に。' }} />
+        <a href="contact.html" className="btn-outline btn-outline--dark"><span>お問い合わせへ</span></a>
+      </FadeUp>
+    </section>
+  );
+}
+
+
+function ServicesPage() {
+  const services = [
+    {
+      icon: 'services01.svg',
+      num: '01',
+      eng: 'General electrical',
+      title: '総合電気設備工事',
+      body: '受変電設備、動力、コンセント、照明、分電盤、幹線工事まで、建物の電気周りを総合的に対応します。オフィスビル・店舗工事・改修工事全般を得意としています。',
+      tags: ['受変電', '幹線', '照明', '分電盤'],
+      list: ['オフィスビル', '商業施設・店舗', '集合住宅', '改修工事'],
+      img: 'images/slide03.jpg'
+    },
+    {
+      icon: 'services02.svg',
+      num: '02',
+      eng: 'Low-voltage',
+      title: '弱電工事',
+      body: 'インターホン、防犯カメラ、TVアンテナ、LAN工事など、弱電全般を得意としています。建物の機能性とセキュリティを支える縁の下の力持ちです。',
+      tags: ['LAN', '防犯カメラ', 'インターホン', 'TVアンテナ'],
+      list: ['LAN工事', '防犯カメラ・録画設備', 'インターホン・呼出設備', 'TVアンテナ・共聴設備'],
+      img: 'images/slide02.jpg'
+    },
+    {
+      icon: 'services03.svg',
+      num: '03',
+      eng: 'Disaster prevention',
+      title: '防災工事（消防設備工事）',
+      body: 'スプリンクラー、自動火災報知器、非常放送など、防災設備の施工と点検まで対応します。建物の安全を守る重要な設備を、確実に。',
+      tags: ['自動火災報知器', '非常放送', 'スプリンクラー'],
+      list: ['自動火災報知設備', '非常放送設備', 'スプリンクラー設備', '誘導灯設備'],
+      img: 'images/IMG_0944-scaled.jpg'
+    },
+    {
+      icon: 'services04.svg',
+      num: '04',
+      eng: 'Air conditioning',
+      title: '空調工事',
+      body: '業務用エアコン、ビル用マルチ、ルームエアコンの設置と更新工事を承ります。気密性・効率を考慮した適切な機器選定からご提案します。',
+      tags: ['業務用', 'ビル用マルチ', 'ルームエアコン'],
+      list: ['業務用エアコン設置', 'ビル用マルチ', 'ルームエアコン', '更新工事・撤去'],
+      img: 'images/slide04.jpg'
+    },
+    {
+      icon: 'services05.svg',
+      num: '05',
+      eng: 'Duct',
+      title: 'ダクト工事',
+      body: '一般換気扇、ロスナイ工事など、換気設備の設計から施工まで一貫対応します。空調工事と組み合わせて、建物の空気環境を整えます。',
+      tags: ['換気扇', 'ロスナイ', '換気設計'],
+      list: ['一般換気扇取付', 'ロスナイ工事', 'ダクト配管・接続', '排気・給気設計'],
+      img: 'images/IMG_0941-scaled.jpg'
+    },
+    {
+      icon: 'services06.svg',
+      num: '06',
+      eng: 'Construction management',
+      title: '電気施工管理',
+      body: '全体の工程管理、打合せ、段取りから現場進行まで承ります。「管理だけお願いしたい」というご依頼にも対応します。',
+      tags: ['工程管理', '段取り', '現場進行'],
+      list: ['工程管理', '事前打合せ・段取り', '安全管理・KY', '竣工検査・引渡し'],
+      img: 'images/IMG_3412-scaled.jpg'
+    },
+    {
+      icon: 'services07.svg',
+      num: '07',
+      eng: 'Design & build',
+      title: '設計・施工',
+      body: '低圧工事の設計から施工までワンストップで承ります。図面作成から現場施工までを同じチームが一貫して行うので、認識のズレがありません。',
+      tags: ['低圧工事', '設計', '一貫対応'],
+      list: ['低圧工事の設計', '施工図面作成', '施工管理', '竣工図納品'],
+      img: 'images/slide05.jpg'
+    },
+    {
+      icon: 'services08.svg',
+      num: '08',
+      eng: 'CAD drawing',
+      title: '図面作成（CAD）',
+      body: 'ベクター・プラスバイプラスを使用し、施工図・竣工図に対応します。スピード重視のご依頼にも、3日以内の図面回答を基本としています。',
+      tags: ['ベクター', 'プラスバイプラス', '3日以内回答'],
+      list: ['施工図作成', '竣工図作成', '改修図作成', '修正・差し替え対応'],
+      img: 'images/IMG_3418-scaled.jpg'
+    },
+  ];
+
+  return (
+    <>
+      <PageHero
+        image="images/contents-services.jpg"
+        label="SERVICES"
+        title="電気工事の8工種を、<br />ひと声で完結。"
+        sub="総合電気から弱電・防災・空調まで。元請け様の「電気周りの調整」を、一社で引き受けます。"
+        breadcrumb="対応工事" />
+
+      <section className="section">
+        <FadeUp>
+          <p className="section__lead" style={{ marginBottom: '5rem', maxWidth: 'none' }}>
+            シゲ電気は、電気工事の幅広い領域を自社対応しています。<br />
+            「電気周りはまとめて1社に頼みたい」というゼネコン・工務店様の調達ニーズに、お応えしてきました。<br />
+            特に低圧工事・弱電・メンテナンスを得意としています。
+          </p>
+        </FadeUp>
+        {services.map((s, i) => (
+          <FadeUp key={i} y={60}>
+            <div className={'service-detail' + (i % 2 === 1 ? ' service-detail--reverse' : '')}>
+              <div className="service-detail__visual">
+                <div className="service-detail__num">{s.num}</div>
+                <img src={s.img} alt={s.title} loading="lazy" />
+              </div>
+              <div className="service-detail__body">
+                <h3>
+                  <small>{s.eng}</small>
+                  {s.title}
+                </h3>
+                <p>{s.body}</p>
+                <div className="service-detail__tags">{s.tags.map(t => <span key={t} className="service-detail__tag">{t}</span>)}</div>
+                <ul className="service-detail__list">{s.list.map(l => <li key={l}>{l}</li>)}</ul>
+              </div>
+            </div>
+          </FadeUp>
+        ))}
+      </section>
+
+      <BottomCTA title="工事のご相談、<br />お見積もりはお気軽に。" />
+    </>
+  );
+}
+
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2200);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>{loading && <LoadingScreen key="loader" />}</AnimatePresence>
+      <Header current="services" />
+      <main><ServicesPage /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

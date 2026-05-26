@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>採用情報 ｜ 株式会社シゲ電気</title>
+<meta name="description" content="電気工事士・現場管理を募集中。テナント改修・オフィスビルの電気工事を手がける会社で、一緒に挑戦しませんか。">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="images/logo.svg" alt="" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>SHIGE DENKI</motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="index.html" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="services.html" className={isActive('services')}>対応工事</a>
+        <a href="works.html" className={isActive('works')}>施工事例</a>
+        <a href="company.html" className={isActive('company')}>会社情報</a>
+        <a href="recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function CountUp({ to, duration = 2 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  useEffect(() => {
+    if (!inView) return;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(to * eased));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, to, duration]);
+  return <span ref={ref}>{count}</span>;
+}
+
+function PageHero({ image, label, title, sub, breadcrumb }) {
+  return (
+    <>
+      <section className="page-hero">
+        <div className="page-hero__bg">
+          <motion.img src={image} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.9 }}>{label}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            dangerouslySetInnerHTML={{ __html: title }} />
+          {sub && <motion.p className="page-hero__sub"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 1.0 }}>{sub}</motion.p>}
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{breadcrumb}</span>
+      </nav>
+    </>
+  );
+}
+
+function BottomCTA({ title }) {
+  return (
+    <section className="bottom-cta">
+      <FadeUp>
+        <div className="bottom-cta__label">─ Get in touch</div>
+        <h2 className="bottom-cta__title" dangerouslySetInnerHTML={{ __html: title || 'お見積もり・ご相談を、<br />お気軽に。' }} />
+        <a href="contact.html" className="btn-outline btn-outline--dark"><span>お問い合わせへ</span></a>
+      </FadeUp>
+    </section>
+  );
+}
+
+
+function RecruitPage() {
+  return (
+    <>
+      <PageHero
+        image="images/slide05.jpg"
+        label="RECRUIT"
+        title="共に成長してくれる<br />仲間を、募集しています。"
+        sub="テナント改修・オフィスビルの電気工事を手がける会社で、一緒に挑戦しませんか。"
+        breadcrumb="採用情報" />
+
+      <section className="section section--narrow">
+        <FadeUp><div className="section__label">Message</div></FadeUp>
+        <FadeUp delay={0.08}>
+          <h2 className="section__title">電気の仕事を、<br />一緒に続けていきませんか。</h2>
+        </FadeUp>
+        <FadeUp delay={0.15}>
+          <p style={{ fontSize: 15, lineHeight: 2.1, color: 'var(--text-gray)', marginBottom: '2rem' }}>
+            シゲ電気は、テナント改修やオフィスビルの電気工事を得意とする会社です。<br />
+            創業以来14年、リピート受注率80%という長いお取引を積み重ねてきました。<br />
+            それを支えてきたのは、現場で誠実に向き合ってきた職人と、報連相を大切にする現場マネジメントです。<br />
+            これからの3年で、より大きな案件にもお応えできる体制を整えていきます。
+            そのために、一緒に成長してくれる仲間を募集しています。
+          </p>
+        </FadeUp>
+      </section>
+
+      <section className="section">
+        <FadeUp><div className="section__label">Positions</div></FadeUp>
+        <FadeUp delay={0.08}><h2 className="section__title">募集職種</h2></FadeUp>
+        <div className="job-grid">
+          <FadeUp delay={0.1}>
+            <div className="job">
+              <div className="job__num">No. 01</div>
+              <h3 className="job__title">電気工事士</h3>
+              <p className="job__sub">FIELD ENGINEER</p>
+              <div className="job__detail">
+                オフィスビル・店舗・集合住宅などの電気工事現場で施工を担当いただきます。
+                先輩の指導のもと、配線・盤工事・照明取付など、現場で技能を磨いていける環境です。
+                <strong>応募資格</strong>
+                未経験OK / 第二種電気工事士をお持ちの方は優遇
+                <strong>採用人数</strong>
+                年2名予定
+              </div>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div className="job">
+              <div className="job__num">No. 02</div>
+              <h3 className="job__title">現場管理</h3>
+              <p className="job__sub">PROJECT MANAGER</p>
+              <div className="job__detail">
+                現場全体の工程管理、打合せ、段取りを担当いただきます。
+                元請け様との折衝、職人さんとの調整、安全管理まで、現場の中心となるお仕事です。
+                <strong>応募資格</strong>
+                現場管理経験 3年以上
+                <strong>採用人数</strong>
+                年1〜2名予定
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      <section className="section reasons">
+        <FadeUp><div className="section__label">Working at SHIGE DENKI</div></FadeUp>
+        <FadeUp delay={0.08}><h2 className="section__title">わたしたちが大切にしていること。</h2></FadeUp>
+        <div className="recruit-points">
+          <FadeUp delay={0.1}>
+            <div>
+              <div className="recruit-point__num">01</div>
+              <h3 className="recruit-point__title">報連相を、大切に。</h3>
+              <p className="recruit-point__body">アプリでの日報、定例ミーティング、事前準備の共有。情報を抱え込まず、チームで現場をつくっていきます。</p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div>
+              <div className="recruit-point__num">02</div>
+              <h3 className="recruit-point__title">無事故を、続ける。</h3>
+              <p className="recruit-point__body">創業以来、重大事故ゼロ。準備と確認を徹底し、誰もが安全に帰れる現場づくりに、皆で取り組みます。</p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.3}>
+            <div>
+              <div className="recruit-point__num">03</div>
+              <h3 className="recruit-point__title">長くお付き合いする。</h3>
+              <p className="recruit-point__body">12年・10年と続く元請け様とのお取引。お客様との関係も、社員との関係も、長く続けることを大切にしています。</p>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      <section className="section section--narrow">
+        <FadeUp><div className="section__label">Welfare</div></FadeUp>
+        <FadeUp delay={0.08}><h2 className="section__title">待遇・福利厚生</h2></FadeUp>
+        <FadeUp delay={0.15}>
+          <table className="info-table">
+            <tbody>
+              <tr><th>勤務地</th><td>埼玉県新座市本社 / 関東全域の現場</td></tr>
+              <tr><th>勤務時間</th><td>8:00 〜 17:00（実働8時間）</td></tr>
+              <tr><th>休日</th><td>日曜・祝日 / その他会社規定による</td></tr>
+              <tr><th>給与</th><td>※詳細はお問い合わせください（経験・資格を考慮）</td></tr>
+              <tr><th>諸手当</th><td>通勤手当・資格手当・残業手当 ほか</td></tr>
+              <tr><th>社会保険</th><td>健康保険・厚生年金・雇用保険・労災保険</td></tr>
+              <tr><th>退職金制度</th><td>建設業退職金共済 加入</td></tr>
+              <tr><th>賠償責任保険</th><td>請負業者賠償責任保険 加入</td></tr>
+              <tr><th>教育制度</th><td>OJT中心 / 資格取得支援あり</td></tr>
+            </tbody>
+          </table>
+        </FadeUp>
+        <FadeUp delay={0.25}>
+          <p style={{ fontSize: 12, color: 'var(--text-light)', marginTop: 24 }}>
+            ※ 待遇・福利厚生の詳細は現在整理中です。具体的な条件はお問い合わせフォームよりお気軽にご相談ください。
+          </p>
+        </FadeUp>
+      </section>
+
+      <section className="bottom-cta">
+        <FadeUp>
+          <div className="bottom-cta__label">─ Apply now</div>
+          <h2 className="bottom-cta__title">ご応募・ご質問は<br />お気軽にどうぞ。</h2>
+          <a href="contact.html" className="btn-outline btn-outline--dark"><span>応募・お問い合わせ</span></a>
+        </FadeUp>
+      </section>
+    </>
+  );
+}
+
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2200);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>{loading && <LoadingScreen key="loader" />}</AnimatePresence>
+      <Header current="recruit" />
+      <main><RecruitPage /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

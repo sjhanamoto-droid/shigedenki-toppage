@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>店舗LED化・改修工事 ｜ 施工事例 ｜ 株式会社シゲ電気</title>
+<meta name="description" content="店舗LED化・改修工事の施工事例詳細。LED化 / 照明改修 / 改修案件">
+<link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="../images/logo.svg" alt="" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>SHIGE DENKI</motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="../index.html" className="header__logo">
+        <img src="../images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="../why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="../services.html" className={isActive('services')}>対応工事</a>
+        <a href="../works.html" className={isActive('works')}>施工事例</a>
+        <a href="../company.html" className={isActive('company')}>会社情報</a>
+        <a href="../recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="../contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="../why-us.html">選ばれる理由</a>
+          <a href="../services.html">対応工事</a>
+          <a href="../works.html">施工事例</a>
+          <a href="../company.html">会社情報</a>
+          <a href="../recruit.html">採用情報</a>
+          <a href="../contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function BottomCTA({ title }) {
+  return (
+    <section className="bottom-cta">
+      <FadeUp>
+        <div className="bottom-cta__label">─ Get in touch</div>
+        <h2 className="bottom-cta__title" dangerouslySetInnerHTML={{ __html: title || 'お見積もり・ご相談を、<br />お気軽に。' }} />
+        <a href="../contact.html" className="btn-outline btn-outline--dark"><span>お問い合わせへ</span></a>
+      </FadeUp>
+    </section>
+  );
+}
+
+
+/* ========== Page Data (injected by build script) ========== */
+const pageData = {"title":"店舗LED化・改修工事","tag":"COMMERCIAL","type":"commercial","year":"2024","scale":"改修案件","scope":"LED化 / 照明改修","location":"","duration":"","budget":"","body":"既存店舗のLED化および改修工事を実施。省エネと照明品質の向上を実現しました。","coverImage":"../images/pagehead-works.jpg","galleryImages":[],"prev":{"slug":"office-interior-2025","title":"オフィスフロアの内装電気工事"},"next":{"slug":"commercial-building-2024","title":"商業ビルの電気設備工事"}};
+
+
+function WorkDetail() {
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+  const d = pageData;
+
+  return (
+    <>
+      {/* Breadcrumb */}
+      <section className="page-hero page-hero--compact">
+        <div className="page-hero__bg">
+          <motion.img src={d.coverImage} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.9 }}>{d.tag}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}>{d.title}</motion.h1>
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="../index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <a href="../works.html">施工事例</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{d.title}</span>
+      </nav>
+
+      {/* Detail Content */}
+      <section className="section work-detail">
+        <div className="work-detail__info">
+          <FadeUp y={40}>
+            <div className="work-detail__photo" onClick={() => setLightboxSrc(d.coverImage)} style={{cursor:'zoom-in'}}>
+              <img src={d.coverImage} alt={d.title} />
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.2} y={40}>
+            <div className="work-detail__meta">
+              <h2 className="work-detail__title">{d.title}</h2>
+              <dl className="work-detail__dl">
+                {d.type && <><dt>Type</dt><dd>{d.tag}</dd></>}
+                {d.scope && <><dt>Scope</dt><dd>{d.scope}</dd></>}
+                {d.scale && <><dt>Scale</dt><dd>{d.scale}</dd></>}
+                {d.location && <><dt>Location</dt><dd>{d.location}</dd></>}
+                {d.duration && <><dt>Duration</dt><dd>{d.duration}</dd></>}
+                {d.budget && <><dt>Budget</dt><dd>{d.budget}</dd></>}
+                {d.year && <><dt>Year</dt><dd>{d.year}</dd></>}
+              </dl>
+            </div>
+          </FadeUp>
+        </div>
+
+        {/* Body */}
+        {d.body && (
+          <FadeUp>
+            <div className="work-detail__body">
+              <p>{d.body}</p>
+            </div>
+          </FadeUp>
+        )}
+
+        {/* Gallery */}
+        {d.galleryImages && d.galleryImages.length > 0 && (
+          <FadeUp>
+            <div className="work-detail__gallery">
+              {d.galleryImages.map((src, i) => (
+                <motion.div key={i} className="work-detail__gallery-item"
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: '-50px' }}
+                  transition={{ duration: 0.7, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={() => setLightboxSrc(src)}
+                  style={{cursor:'zoom-in'}}>
+                  <img src={src} alt={`${d.title} - ${i + 1}`} loading="lazy" />
+                </motion.div>
+              ))}
+            </div>
+          </FadeUp>
+        )}
+
+        {/* Prev / Next Navigation */}
+        <div className="work-detail__nav">
+          {d.prev ? (
+            <a href={`${d.prev.slug}.html`} className="work-detail__nav-link work-detail__nav-link--prev">
+              <span className="work-detail__nav-label">PREV</span>
+              <span className="work-detail__nav-title">{d.prev.title}</span>
+            </a>
+          ) : <div />}
+          <a href="../works.html" className="work-detail__nav-back">一覧に戻る</a>
+          {d.next ? (
+            <a href={`${d.next.slug}.html`} className="work-detail__nav-link work-detail__nav-link--next">
+              <span className="work-detail__nav-label">NEXT</span>
+              <span className="work-detail__nav-title">{d.next.title}</span>
+            </a>
+          ) : <div />}
+        </div>
+      </section>
+
+      <BottomCTA title="類似事例のご相談、<br />お見積もりはお気軽に。" />
+
+      {/* Lightbox */}
+      <div className={`lightbox${lightboxSrc ? ' lightbox--open' : ''}`} onClick={() => setLightboxSrc(null)}>
+        <button className="lightbox__close" onClick={() => setLightboxSrc(null)} />
+        {lightboxSrc && <img src={lightboxSrc} alt="拡大表示" onClick={(e) => e.stopPropagation()} style={{cursor:'default'}} />}
+      </div>
+    </>
+  );
+}
+
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2200);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>{loading && <LoadingScreen key="loader" />}</AnimatePresence>
+      <Header current="works" />
+      <main><WorkDetail /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

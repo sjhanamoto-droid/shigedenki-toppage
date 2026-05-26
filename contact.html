@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ ｜ 株式会社シゲ電気</title>
+<meta name="description" content="お見積もり・ご相談・採用に関するお問い合わせは、お電話またはフォームよりお気軽にどうぞ。">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="images/logo.svg" alt="" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>SHIGE DENKI</motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="index.html" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="services.html" className={isActive('services')}>対応工事</a>
+        <a href="works.html" className={isActive('works')}>施工事例</a>
+        <a href="company.html" className={isActive('company')}>会社情報</a>
+        <a href="recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function CountUp({ to, duration = 2 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  useEffect(() => {
+    if (!inView) return;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(to * eased));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, to, duration]);
+  return <span ref={ref}>{count}</span>;
+}
+
+function PageHero({ image, label, title, sub, breadcrumb }) {
+  return (
+    <>
+      <section className="page-hero">
+        <div className="page-hero__bg">
+          <motion.img src={image} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.9 }}>{label}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            dangerouslySetInnerHTML={{ __html: title }} />
+          {sub && <motion.p className="page-hero__sub"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 1.0 }}>{sub}</motion.p>}
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{breadcrumb}</span>
+      </nav>
+    </>
+  );
+}
+
+function BottomCTA({ title }) {
+  return (
+    <section className="bottom-cta">
+      <FadeUp>
+        <div className="bottom-cta__label">─ Get in touch</div>
+        <h2 className="bottom-cta__title" dangerouslySetInnerHTML={{ __html: title || 'お見積もり・ご相談を、<br />お気軽に。' }} />
+        <a href="contact.html" className="btn-outline btn-outline--dark"><span>お問い合わせへ</span></a>
+      </FadeUp>
+    </section>
+  );
+}
+
+
+function ContactPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 4500);
+  };
+
+  return (
+    <>
+      <PageHero
+        image="images/pagehead.jpg"
+        label="CONTACT"
+        title="お問い合わせ。"
+        sub="ご相談・お見積もり依頼は、お電話またはフォームよりお気軽にどうぞ。"
+        breadcrumb="お問い合わせ" />
+
+      <section className="section">
+        <div className="contact__grid" style={{ marginTop: 0 }}>
+          <FadeUp delay={0.1}>
+            <div className="contact__card">
+              <h3>By phone</h3>
+              <div className="contact__tel">048-201-6222</div>
+              <div className="contact__hours">平日 8:00 〜 17:00（日・祝定休）</div>
+              <p style={{ marginTop: 24, fontSize: 13, color: 'var(--text-gray)', lineHeight: 1.9 }}>
+                お電話でのご相談を歓迎します。<br />
+                現場の規模感だけでもお聞かせください。
+              </p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div className="contact__card">
+              <h3>Online form</h3>
+              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--text-sumi)', marginBottom: 12, lineHeight: 1.6 }}>
+                フォームから<br />ご相談ください
+              </p>
+              <p className="contact__hours">24時間お受けします</p>
+              <p style={{ marginTop: 24, fontSize: 13, color: 'var(--text-gray)', lineHeight: 1.9 }}>
+                下のフォームに必要事項をご記入のうえ送信してください。<br />
+                3営業日以内にご返信いたします。
+              </p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.3}>
+            <div className="contact__card">
+              <h3>Capacity</h3>
+              <ul className="contact__items">
+                <li><strong>対応エリア</strong>関東全域</li>
+                <li><strong>同時並行可能数</strong>5現場</li>
+                <li><strong>緊急対応</strong>24時間体制</li>
+                <li><strong>見積もり目安</strong>1週間以内</li>
+              </ul>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      <section className="section section--narrow">
+        <FadeUp><div className="section__label">Inquiry form</div></FadeUp>
+        <FadeUp delay={0.08}>
+          <h2 className="section__title">お問い合わせフォーム</h2>
+        </FadeUp>
+        <FadeUp delay={0.15}>
+          <p className="section__lead">
+            <span className="required" style={{ color: 'var(--accent-brass)' }}>*</span> は必須項目です。
+            お見積もりのご依頼や、技術的なご質問、採用に関するお問い合わせなど、お気軽にご記入ください。
+          </p>
+        </FadeUp>
+        <FadeUp delay={0.2}>
+          <form className="form" onSubmit={onSubmit}>
+            <div className="form__field">
+              <label className="form__label">Company / 会社名 <span className="required">*</span></label>
+              <input className="form__input" type="text" required placeholder="株式会社○○" />
+            </div>
+            <div className="form__field">
+              <label className="form__label">Name / ご担当者名 <span className="required">*</span></label>
+              <input className="form__input" type="text" required placeholder="山田 太郎" />
+            </div>
+            <div className="form__field">
+              <label className="form__label">Department / 部署・役職 <small>任意</small></label>
+              <input className="form__input" type="text" placeholder="工事部・現場監督" />
+            </div>
+            <div className="form__field">
+              <label className="form__label">Phone / 電話番号 <span className="required">*</span></label>
+              <input className="form__input" type="tel" required placeholder="03-0000-0000" />
+            </div>
+            <div className="form__field">
+              <label className="form__label">Email / メールアドレス <span className="required">*</span></label>
+              <input className="form__input" type="email" required placeholder="example@company.co.jp" />
+            </div>
+            <div className="form__field">
+              <label className="form__label">Subject / お問い合わせ種別</label>
+              <select className="form__select" defaultValue="">
+                <option value="">選択してください</option>
+                <option>新規案件のご相談</option>
+                <option>お見積もりのご依頼</option>
+                <option>採用について</option>
+                <option>その他</option>
+              </select>
+            </div>
+            <div className="form__field">
+              <label className="form__label">Project type / 物件種別 <small>任意</small></label>
+              <select className="form__select" defaultValue="">
+                <option value="">選択してください</option>
+                <option>オフィスビル</option>
+                <option>商業施設・店舗</option>
+                <option>集合住宅</option>
+                <option>工場・倉庫</option>
+                <option>その他</option>
+              </select>
+            </div>
+            <div className="form__field">
+              <label className="form__label">Scale / 概算規模 <small>任意</small></label>
+              <input className="form__input" type="text" placeholder="例: 500㎡程度 / 300万円程度 など" />
+            </div>
+            <div className="form__field form__field--full">
+              <label className="form__label">Message / ご相談内容 <span className="required">*</span></label>
+              <textarea className="form__textarea" required placeholder="現場の概要、工期、ご希望時期などを差し支えない範囲でお聞かせください"></textarea>
+            </div>
+            <div className="form__submit form__field--full">
+              <button type="submit" className="btn-primary"><span>{submitted ? '送信完了しました' : '送信する'}</span></button>
+              {submitted && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ marginTop: 16, color: 'var(--sage-primary)', fontSize: 13, letterSpacing: '0.05em' }}>
+                  お問い合わせありがとうございます。3営業日以内にご返信いたします。<br />
+                  <small style={{ color: 'var(--text-light)', fontSize: 11 }}>※ プロトタイプのため実際の送信は行われません</small>
+                </motion.p>
+              )}
+            </div>
+          </form>
+        </FadeUp>
+      </section>
+    </>
+  );
+}
+
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2200);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>{loading && <LoadingScreen key="loader" />}</AnimatePresence>
+      <Header current="contact" />
+      <main><ContactPage /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

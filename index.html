@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>株式会社シゲ電気 ｜ 10年、20年と、信頼を重ねていけるパートナーへ。</title>
+<meta name="description" content="株式会社シゲ電気は、テナント改修・オフィスビルを中心に関東全域で電気工事を請け負う会社です。ゼネコン・工務店様との長いお取引を大切にしています。">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --sage-primary:#7C8A8A;
+  --sage-mid:#91AAA7;
+  --sage-light:#9EBCBA;
+  --sage-darker:#5A6868;
+  --sage-pale:#D8E2E0;
+  --bg-warm:#FAFAF7;
+  --bg-sand:#E8E5DC;
+  --bg-cream:#F2EFE8;
+  --text-sumi:#2C2C2A;
+  --text-gray:#6B6B68;
+  --text-light:#999996;
+  --accent-brass:#B8893E;
+  --font-serif:'Noto Serif JP','Yu Mincho',serif;
+  --font-sans:'Noto Sans JP',sans-serif;
+  --font-display:'Cormorant Garamond','Garamond',serif;
+  --font-mono:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--font-sans);
+  color:var(--text-sumi);
+  background:var(--bg-warm);
+  overflow-x:hidden;
+  line-height:1.8;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--sage-light);color:var(--text-sumi)}
+
+/* === Loading Screen === */
+.loader{
+  position:fixed;inset:0;background:var(--bg-warm);z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.loader__logo{width:180px;height:auto}
+.loader__text{
+  font-family:var(--font-display);font-weight:300;
+  letter-spacing:0.5em;font-size:11px;color:var(--sage-primary);
+  margin-top:24px;
+}
+.loader__line{height:1px;background:var(--sage-primary);margin-top:24px}
+
+/* === Header === */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:24px 48px;display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.5s cubic-bezier(0.4,0,0.2,1);
+  background:transparent;
+}
+.header--scrolled{
+  background:rgba(250,250,247,0.92);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  padding:14px 48px;border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.header__logo img{height:46px;transition:height 0.4s}
+.header--scrolled .header__logo img{height:38px}
+.header__nav{display:flex;gap:40px;font-family:var(--font-serif);font-weight:400;font-size:13px;letter-spacing:0.08em}
+.header__nav a{position:relative;color:var(--text-sumi);padding:6px 0;transition:color 0.3s}
+.header__nav a::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--sage-primary);transform:scaleX(0);transform-origin:right;
+  transition:transform 0.5s cubic-bezier(0.6,0,0.4,1);
+}
+.header__nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.header__nav a:hover{color:var(--sage-primary)}
+
+/* === Hero === */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.hero__bg{position:absolute;inset:0;z-index:0}
+.hero__bg img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+}
+.hero__overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(105deg,
+    rgba(250,250,247,0.95) 0%,
+    rgba(250,250,247,0.75) 35%,
+    rgba(250,250,247,0.35) 70%,
+    rgba(250,250,247,0.1) 100%);
+}
+.hero__content{
+  position:relative;z-index:2;max-width:1280px;margin:0 auto;
+  padding:0 6%;width:100%;
+}
+.hero__small{
+  font-family:var(--font-display);font-weight:300;
+  letter-spacing:0.4em;font-size:11px;color:var(--sage-primary);
+  margin-bottom:32px;
+}
+.hero__small::before{
+  content:'';display:inline-block;width:36px;height:1px;
+  background:var(--sage-primary);vertical-align:middle;margin-right:16px;
+}
+.hero__copy{
+  font-family:var(--font-serif);font-weight:300;
+  font-size:clamp(28px,4.8vw,68px);line-height:1.55;
+  letter-spacing:0.06em;color:var(--text-sumi);
+}
+.hero__copy .line{overflow:hidden;display:block;padding-bottom:0.08em}
+.hero__copy .line > span{display:inline-block;will-change:transform}
+.hero__sub{
+  margin-top:40px;font-size:15px;line-height:2.1;
+  color:var(--text-gray);max-width:520px;letter-spacing:0.04em;
+}
+.hero__cta{margin-top:48px;display:flex;gap:32px;align-items:center;flex-wrap:wrap}
+.btn-primary{
+  background:var(--sage-primary);color:var(--bg-warm);
+  padding:18px 40px;font-size:13px;letter-spacing:0.15em;
+  position:relative;overflow:hidden;transition:all 0.4s;display:inline-block;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;background:var(--sage-darker);
+  transform:scaleX(0);transform-origin:right;
+  transition:transform 0.5s cubic-bezier(0.6,0,0.4,1);
+}
+.btn-primary:hover::before{transform:scaleX(1);transform-origin:left}
+.btn-primary span{position:relative;z-index:1}
+.btn-primary span::after{content:' →';margin-left:8px;transition:margin-left 0.4s}
+.btn-primary:hover span::after{margin-left:12px}
+.hero__tel{
+  font-family:var(--font-display);font-weight:300;font-size:30px;
+  letter-spacing:0.05em;color:var(--text-sumi);
+}
+.hero__tel small{
+  display:block;font-family:var(--font-sans);font-size:11px;
+  color:var(--text-gray);letter-spacing:0.15em;font-weight:400;margin-top:2px;
+}
+.hero__scroll{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.4em;
+  color:var(--sage-primary);z-index:3;text-align:center;
+}
+.hero__scroll::after{
+  content:'';display:block;width:1px;height:60px;background:var(--sage-primary);
+  margin:14px auto 0;animation:scrollLine 2.2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+/* === Section common === */
+.section{padding:140px 6%;max-width:1280px;margin:0 auto}
+.section__label{
+  font-family:var(--font-display);font-weight:400;font-size:12px;
+  letter-spacing:0.4em;color:var(--sage-primary);
+  margin-bottom:1.2rem;text-transform:uppercase;
+}
+.section__label::before{
+  content:'';display:inline-block;width:32px;height:1px;
+  background:var(--sage-primary);vertical-align:middle;margin-right:14px;
+}
+.section__title{
+  font-family:var(--font-serif);font-weight:300;
+  font-size:clamp(28px,3.6vw,48px);line-height:1.5;letter-spacing:0.06em;
+  margin-bottom:5rem;color:var(--text-sumi);
+}
+
+/* === Stats === */
+.stats-section{background:var(--bg-warm);position:relative;overflow:hidden}
+.stats__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:80px 60px}
+.stat{position:relative;padding-top:32px}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;width:48px;height:1px;
+  background:var(--sage-primary);
+}
+.stat__num{
+  font-family:var(--font-display);font-weight:300;
+  font-size:clamp(64px,7.5vw,108px);color:var(--sage-primary);
+  line-height:0.95;letter-spacing:-0.02em;white-space:nowrap;
+}
+.stat__num small{font-size:0.42em;margin-left:0.08em;color:var(--sage-mid);font-weight:300}
+.stat__label{margin-top:16px;font-size:13px;letter-spacing:0.1em;color:var(--text-gray)}
+@media(min-width:1025px){.stat__num--text{font-size:clamp(48px,5vw,72px)}}
+
+/* === Reasons === */
+.reasons{background:var(--bg-sand);position:relative}
+.reasons__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:60px}
+.reason{padding-right:30px}
+.reason__num{
+  font-family:var(--font-display);font-size:84px;font-weight:300;
+  color:var(--sage-mid);line-height:1;opacity:0.55;letter-spacing:-0.02em;
+}
+.reason__title{
+  font-family:var(--font-serif);font-weight:400;font-size:22px;
+  margin:1.5rem 0 1.2rem;line-height:1.7;letter-spacing:0.04em;color:var(--text-sumi);
+}
+.reason__body{font-size:14px;line-height:2;color:var(--text-gray);letter-spacing:0.02em}
+.reason__tags{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:8px}
+.reason__tag{
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.15em;
+  padding:6px 14px;border:1px solid var(--sage-mid);color:var(--sage-darker);
+  border-radius:0;
+}
+
+/* === Services === */
+.services{background:var(--bg-warm)}
+.services__grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--sage-light);border-left:1px solid var(--sage-light);
+}
+.service{
+  border-right:1px solid var(--sage-light);border-bottom:1px solid var(--sage-light);
+  padding:48px 36px 36px;transition:all 0.5s;cursor:default;position:relative;overflow:hidden;
+  background:var(--bg-warm);
+}
+.service::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--sage-primary);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.6s cubic-bezier(0.6,0,0.4,1);
+}
+.service:hover::before{transform:scaleX(1)}
+.service:hover{background:var(--bg-cream)}
+.service__icon{height:56px;display:flex;align-items:center}
+.service__icon img{width:auto;height:48px;transition:transform 0.6s cubic-bezier(0.6,0,0.4,1)}
+.service:hover .service__icon img{transform:scale(1.1) rotate(-4deg)}
+.service__title{
+  font-family:var(--font-serif);font-weight:500;font-size:17px;
+  margin:24px 0 12px;letter-spacing:0.04em;color:var(--text-sumi);
+}
+.service__body{font-size:12px;color:var(--text-gray);line-height:1.85;letter-spacing:0.02em}
+
+/* === Works === */
+.works{background:var(--bg-warm)}
+.works__featured{
+  display:grid;grid-template-columns:1.3fr 1fr;gap:80px;
+  align-items:center;margin-bottom:100px;
+}
+.works__photo{position:relative;aspect-ratio:4/3;overflow:hidden}
+.works__photo img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.works__photo:hover img{transform:scale(1.06)}
+.works__photo__tag{
+  position:absolute;top:24px;left:24px;background:var(--bg-warm);
+  color:var(--sage-primary);font-family:var(--font-display);font-size:11px;
+  letter-spacing:0.3em;padding:8px 18px;z-index:1;
+}
+.works__details{padding-left:0}
+.works__details__heading{
+  font-family:var(--font-serif);font-weight:300;font-size:30px;
+  line-height:1.6;letter-spacing:0.05em;margin-bottom:40px;
+}
+.works__details dl{display:grid;grid-template-columns:120px 1fr;gap:20px 30px;margin-top:24px}
+.works__details dt{
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.25em;
+  color:var(--sage-primary);text-transform:uppercase;
+  padding-top:6px;
+}
+.works__details dd{
+  font-family:var(--font-serif);font-size:15px;line-height:1.8;
+  border-bottom:1px solid var(--bg-sand);padding-bottom:14px;color:var(--text-sumi);
+}
+.works__gallery{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;
+}
+.works__gallery__item{
+  aspect-ratio:1/1;overflow:hidden;cursor:pointer;position:relative;
+}
+.works__gallery__item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:all 0.7s cubic-bezier(0.4,0,0.2,1);filter:brightness(0.96);
+}
+.works__gallery__item:hover img{transform:scale(1.1);filter:brightness(1.05)}
+.works__gallery__item::after{
+  content:'';position:absolute;inset:0;background:rgba(124,138,138,0);
+  transition:background 0.5s;pointer-events:none;
+}
+.works__gallery__item:hover::after{background:rgba(124,138,138,0.08)}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);opacity:0;pointer-events:none;transition:opacity 0.3s ease;cursor:zoom-out}
+.lightbox--open{opacity:1;pointer-events:auto}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px;transform:scale(0.92);transition:transform 0.3s ease}
+.lightbox--open img{transform:scale(1)}
+.lightbox__close{position:absolute;top:24px;right:24px;width:40px;height:40px;border:none;background:rgba(255,255,255,0.15);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.lightbox__close:hover{background:rgba(255,255,255,0.3)}
+.lightbox__close::before,.lightbox__close::after{content:'';position:absolute;width:20px;height:2px;background:#fff}
+.lightbox__close::before{transform:rotate(45deg)}
+.lightbox__close::after{transform:rotate(-45deg)}
+
+.clients{
+  margin-top:80px;padding-top:48px;border-top:1px solid var(--sage-light);
+}
+.clients__label{
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.3em;
+  color:var(--sage-primary);margin-bottom:24px;text-transform:uppercase;
+}
+.clients__list{display:flex;gap:48px;flex-wrap:wrap;font-family:var(--font-serif)}
+.client{display:flex;align-items:baseline;gap:12px}
+.client__name{font-size:18px;color:var(--text-sumi);letter-spacing:0.05em}
+.client__years{font-family:var(--font-display);font-size:15px;color:var(--sage-primary);letter-spacing:0.05em}
+.client__years::before{content:'─ ';color:var(--sage-mid)}
+
+/* === Trust === */
+.trust{background:var(--bg-sand)}
+.trust__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px}
+.trust__block{padding:0}
+.trust__block h3{
+  font-family:var(--font-serif);font-weight:500;font-size:18px;
+  padding-bottom:18px;border-bottom:1px solid var(--sage-mid);
+  margin-bottom:24px;letter-spacing:0.05em;color:var(--text-sumi);
+}
+.trust__block ul{list-style:none;font-size:13px;line-height:2.1;color:var(--text-gray)}
+.trust__block ul li{padding-left:14px;position:relative;letter-spacing:0.02em}
+.trust__block ul li::before{
+  content:'';position:absolute;left:0;top:14px;width:6px;height:1px;
+  background:var(--sage-primary);
+}
+
+/* === CEO === */
+.ceo-section{background:var(--bg-warm);padding:0;max-width:none;margin:0}
+.ceo__inner{display:grid;grid-template-columns:1fr 1.2fr;min-height:680px}
+.ceo__photo{position:relative;overflow:hidden;background:var(--sage-pale)}
+.ceo__photo img{width:100%;height:100%;object-fit:cover}
+.ceo__photo__label{
+  position:absolute;bottom:32px;left:32px;color:var(--bg-warm);
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.3em;
+  z-index:1;background:rgba(44,44,42,0.7);padding:10px 18px;
+}
+.ceo__text{padding:120px 80px;display:flex;flex-direction:column;justify-content:center}
+.ceo__quote{
+  font-family:var(--font-serif);font-weight:300;font-size:30px;
+  line-height:1.8;letter-spacing:0.05em;margin-bottom:2.5rem;color:var(--text-sumi);
+}
+.ceo__body{font-size:14px;line-height:2;color:var(--text-gray);max-width:520px;letter-spacing:0.04em}
+.ceo__body p+p{margin-top:1.4rem}
+.ceo__name{
+  margin-top:3.5rem;font-family:var(--font-serif);font-size:13px;
+  color:var(--text-gray);letter-spacing:0.05em;
+}
+.ceo__name strong{
+  display:block;font-size:24px;font-weight:400;margin-top:6px;color:var(--text-sumi);
+}
+
+/* === Recruit === */
+.recruit{
+  background:var(--sage-primary);color:var(--bg-warm);
+  padding:100px 6%;max-width:none;margin:0;position:relative;overflow:hidden;
+}
+.recruit::before{
+  content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;
+  border:1px solid rgba(250,250,247,0.1);border-radius:50%;
+}
+.recruit::after{
+  content:'';position:absolute;bottom:-30%;left:-10%;width:400px;height:400px;
+  border:1px solid rgba(250,250,247,0.08);border-radius:50%;
+}
+.recruit__inner{
+  max-width:1200px;margin:0 auto;display:grid;
+  grid-template-columns:2fr 1fr;align-items:center;gap:80px;
+  position:relative;z-index:1;
+}
+.recruit__label{
+  font-family:var(--font-display);font-size:12px;letter-spacing:0.4em;
+  margin-bottom:1.2rem;opacity:0.85;text-transform:uppercase;
+}
+.recruit__title{
+  font-family:var(--font-serif);font-weight:300;font-size:36px;
+  line-height:1.7;letter-spacing:0.05em;
+}
+.recruit__body{margin-top:1.5rem;font-size:13px;line-height:2;opacity:0.85}
+.btn-outline{
+  border:1px solid var(--bg-warm);color:var(--bg-warm);
+  padding:18px 40px;font-size:13px;letter-spacing:0.15em;
+  transition:all 0.4s;display:inline-block;position:relative;overflow:hidden;
+}
+.btn-outline::before{
+  content:'';position:absolute;inset:0;background:var(--bg-warm);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform 0.5s cubic-bezier(0.6,0,0.4,1);
+}
+.btn-outline:hover::before{transform:scaleY(1);transform-origin:top}
+.btn-outline:hover{color:var(--sage-primary)}
+.btn-outline span{position:relative;z-index:1}
+
+/* === Contact === */
+.contact{background:var(--bg-warm);padding:140px 6%;max-width:none;margin:0}
+.contact__inner{max-width:1280px;margin:0 auto}
+.contact__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:5rem}
+.contact__card{
+  padding:48px 40px;background:var(--bg-warm);border:1px solid var(--sage-light);
+  transition:all 0.5s;position:relative;overflow:hidden;
+}
+.contact__card::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:3px;
+  background:var(--sage-primary);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.6s cubic-bezier(0.6,0,0.4,1);
+}
+.contact__card:hover::before{transform:scaleX(1)}
+.contact__card:hover{background:var(--bg-cream);border-color:var(--sage-primary)}
+.contact__card h3{
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.3em;
+  color:var(--sage-primary);margin-bottom:1.5rem;text-transform:uppercase;
+}
+.contact__tel{
+  font-family:var(--font-display);font-weight:300;font-size:42px;
+  letter-spacing:0.04em;color:var(--text-sumi);margin-bottom:12px;line-height:1;
+}
+.contact__hours{font-size:12px;color:var(--text-gray);letter-spacing:0.05em}
+.contact__items{margin-top:8px}
+.contact__items li{
+  font-size:13px;color:var(--text-gray);padding:8px 0;
+  border-bottom:1px solid var(--bg-sand);list-style:none;
+}
+.contact__items li:last-child{border:none}
+.contact__items li strong{
+  display:block;color:var(--text-sumi);font-size:14px;
+  font-family:var(--font-serif);font-weight:500;margin-bottom:2px;
+}
+
+/* === Footer === */
+.footer{background:var(--text-sumi);color:var(--bg-warm);padding:80px 6% 40px}
+.footer__inner{
+  max-width:1280px;margin:0 auto;display:grid;
+  grid-template-columns:1fr auto;gap:80px;
+  padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.footer__logo img{width:220px;filter:brightness(0) invert(1) opacity(0.85)}
+.footer__address{
+  margin-top:2rem;font-size:13px;line-height:2;
+  opacity:0.7;letter-spacing:0.04em;
+}
+.footer__tel{
+  margin-top:1.5rem;font-family:var(--font-display);font-size:24px;
+  font-weight:300;letter-spacing:0.05em;color:var(--bg-warm);
+}
+.footer__nav{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
+  font-family:var(--font-serif);font-size:13px;letter-spacing:0.05em;
+  align-content:start;
+}
+.footer__nav a{opacity:0.75;transition:opacity 0.3s,padding-left 0.3s;display:inline-block}
+.footer__nav a:hover{opacity:1;padding-left:6px}
+.footer__copyright{
+  margin-top:36px;text-align:center;font-size:11px;
+  opacity:0.5;letter-spacing:0.15em;font-family:var(--font-display);
+}
+
+/* === Responsive === */
+@media (max-width:1024px){
+  .stats__grid,.reasons__grid,.trust__grid{grid-template-columns:repeat(2,1fr)}
+  .services__grid{grid-template-columns:repeat(2,1fr)}
+  .works__featured{grid-template-columns:1fr;gap:40px}
+  .works__details__heading{font-size:24px}
+  .ceo__inner{grid-template-columns:1fr}
+  .ceo__photo{min-height:400px}
+  .ceo__text{padding:80px 40px}
+  .contact__grid,.recruit__inner,.footer__inner{grid-template-columns:1fr;gap:40px}
+  .header,.header--scrolled{padding:16px 24px}
+  .hero__content{padding:0 6%}
+  .section{padding:100px 6%}
+}
+@media (max-width:640px){
+  .header__logo img{height:38px}
+  .header__nav{display:none}
+  .section{padding:80px 6%}
+  .stats__grid,.reasons__grid,.services__grid,.trust__grid{grid-template-columns:1fr;gap:48px}
+  .works__gallery{grid-template-columns:repeat(2,1fr)}
+  .works__details dl{grid-template-columns:1fr;gap:8px 0}
+  .works__details dt{padding-top:14px}
+  .ceo__text{padding:60px 24px}
+  .ceo__quote{font-size:22px}
+  .contact{padding:80px 6%}
+  .contact__tel{font-size:34px}
+  .recruit__title{font-size:24px}
+  .hero__cta{gap:20px}
+  .footer{padding:60px 24px 30px}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+
+/* ================= Loading Screen ================= */
+function LoadingScreen() {
+  return (
+    <motion.div className="loader"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7, ease: "easeInOut" }}>
+      <motion.img src="images/logo.svg" alt="株式会社シゲ電気" className="loader__logo"
+        initial={{ opacity: 0, scale: 0.85, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }} />
+      <motion.div className="loader__text"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.8 }}>
+        SHIGE DENKI
+      </motion.div>
+      <motion.div className="loader__line"
+        initial={{ width: 0 }}
+        animate={{ width: 220 }}
+        transition={{ delay: 0.85, duration: 1.6, ease: [0.16, 1, 0.3, 1] }} />
+    </motion.div>
+  );
+}
+
+/* ================= Header ================= */
+function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="#top" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html">選ばれる理由</a>
+        <a href="services.html">対応工事</a>
+        <a href="works.html">施工事例</a>
+        <a href="company.html">会社情報</a>
+        <a href="contact.html">お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+/* ================= FadeUp utility ================= */
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>
+      {children}
+    </motion.div>
+  );
+}
+
+/* ================= Hero ================= */
+function Hero() {
+  const slides = ['images/slide02.jpg', 'images/slide05.jpg', 'images/slide03.jpg', 'images/slide04.jpg'];
+  const [current, setCurrent] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5500);
+    return () => clearInterval(interval);
+  }, []);
+  
+  const lineFade = i => ({
+    initial: { y: '105%', opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    transition: { delay: 0.9 + i * 0.18, duration: 1.3, ease: [0.16, 1, 0.3, 1] }
+  });
+  
+  return (
+    <section className="hero" id="top">
+      <div className="hero__bg">
+        <AnimatePresence>
+          <motion.img
+            key={current}
+            src={slides[current]}
+            alt=""
+            initial={{ opacity: 0, scale: 1.12 }}
+            animate={{ opacity: 1, scale: 1.02 }}
+            exit={{ opacity: 0 }}
+            transition={{ opacity: { duration: 2.2 }, scale: { duration: 9, ease: 'linear' } }} />
+        </AnimatePresence>
+      </div>
+      <div className="hero__overlay"></div>
+      <div className="hero__content">
+        <motion.div className="hero__small"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.6, duration: 1 }}>
+          ESTABLISHED 2019 · SAITAMA
+        </motion.div>
+        <h1 className="hero__copy">
+          <span className="line"><motion.span {...lineFade(0)}>10年、20年と、</motion.span></span>
+          <span className="line"><motion.span {...lineFade(1)}>信頼を重ねていける</motion.span></span>
+          <span className="line"><motion.span {...lineFade(2)}>パートナーへ。</motion.span></span>
+        </h1>
+        <motion.p className="hero__sub"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.9, duration: 1.2 }}>
+          テナント改修・オフィスビルの電気工事なら、株式会社シゲ電気。<br />
+          関東全域で、ゼネコン・工務店様の継続案件を支えます。
+        </motion.p>
+        <motion.div className="hero__cta"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.2, duration: 1.2 }}>
+          <a href="contact.html" className="btn-primary"><span>お見積もり・ご相談</span></a>
+          <div className="hero__tel">
+            048-201-6222
+            <small>平日 8:00 〜 17:00</small>
+          </div>
+        </motion.div>
+      </div>
+      <motion.div className="hero__scroll"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.8, duration: 1.2 }}>
+        SCROLL
+      </motion.div>
+    </section>
+  );
+}
+
+/* ================= CountUp ================= */
+function CountUp({ to, duration = 2 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  useEffect(() => {
+    if (!inView) return;
+    let start = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(to * eased));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, to, duration]);
+  return <span ref={ref}>{count}</span>;
+}
+
+/* ================= Stats ================= */
+function Stats() {
+  const stats = [
+    { num: 0, suffix: '件', label: '創業以来の重大事故' },
+    { num: 80, suffix: '%', label: 'リピート受注率' },
+    { num: 12, suffix: '年', label: '最長取引年数' },
+    { num: 5, suffix: '現場', label: '同時並行可能数' },
+    { num: 24, suffix: '時間', label: '緊急対応体制' },
+    { text: '関東全域', label: '対応エリア' },
+  ];
+  return (
+    <section className="section stats-section" id="why">
+      <FadeUp><div className="section__label">By the numbers</div></FadeUp>
+      <FadeUp delay={0.08}>
+        <h2 className="section__title">数字で見る、<br />わたしたちの歩み。</h2>
+      </FadeUp>
+      <div className="stats__grid">
+        {stats.map((s, i) => (
+          <FadeUp key={i} delay={i * 0.1}>
+            <div className="stat">
+              <div className={`stat__num${s.text ? ' stat__num--text' : ''}`}>
+                {s.text ? s.text : (<><CountUp to={s.num} /><small>{s.suffix}</small></>)}
+              </div>
+              <div className="stat__label">{s.label}</div>
+            </div>
+          </FadeUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ================= Reasons ================= */
+function Reasons() {
+  const reasons = [
+    {
+      num: '01',
+      title: '報連相を徹底した、現場運営。',
+      body: 'アプリでの日報報告、定例ミーティング、事前準備の共有。進捗が見えるから、元請けの担当者様に安心してお任せいただける。だから、12年・10年と続くお取引があります。',
+      tags: ['日報共有', '定例ミーティング', '事前準備']
+    },
+    {
+      num: '02',
+      title: '8工種を、ひと声で完結。',
+      body: '総合電気・弱電・防災・空調・ダクト・施工管理・設計施工・図面作成。電気周りの調整を1社で完結できます。特に低圧工事・弱電・メンテナンスを得意としています。',
+      tags: ['総合電気', '弱電', '防災', '低圧工事']
+    },
+    {
+      num: '03',
+      title: '関東全域、24時間、複数現場。',
+      body: '同時5現場・1現場最大12名のキャパシティ。過去最大規模は3,000万円・1,500㎡・工期4ヶ月。急ぎのご相談にも24時間で動ける体制を整えています。',
+      tags: ['同時5現場', '最大12名', '24時間対応']
+    },
+  ];
+  return (
+    <section className="section reasons">
+      <FadeUp><div className="section__label">Why us</div></FadeUp>
+      <FadeUp delay={0.08}><h2 className="section__title">選ばれてきた、<br />3つの理由。</h2></FadeUp>
+      <div className="reasons__grid">
+        {reasons.map((r, i) => (
+          <FadeUp key={i} delay={i * 0.15} y={50}>
+            <div className="reason">
+              <div className="reason__num">{r.num}</div>
+              <h3 className="reason__title">{r.title}</h3>
+              <p className="reason__body">{r.body}</p>
+              <div className="reason__tags">
+                {r.tags.map(t => <span key={t} className="reason__tag">{t}</span>)}
+              </div>
+            </div>
+          </FadeUp>
+        ))}
+      </div>
+      <FadeUp delay={0.5}>
+        <div style={{ textAlign: 'center', marginTop: 64 }}>
+          <a href="why-us.html" className="btn-primary"><span>選ばれる理由を詳しく</span></a>
+        </div>
+      </FadeUp>
+    </section>
+  );
+}
+
+/* ================= Services ================= */
+function Services() {
+  const services = [
+    { icon: 'services01.svg', title: '総合電気設備工事', body: 'オフィスビル、店舗工事、改修工事全般。受変電設備から照明まで。' },
+    { icon: 'services02.svg', title: '弱電工事', body: 'インターホン、防犯カメラ、TVアンテナ、LAN工事まで幅広く対応。' },
+    { icon: 'services03.svg', title: '防災工事', body: 'スプリンクラー、自動火災報知器、非常放送。消防設備の施工と点検。' },
+    { icon: 'services04.svg', title: '空調工事', body: '業務用エアコン、ビル用マルチ、ルームエアコンの取付・更新。' },
+    { icon: 'services05.svg', title: 'ダクト工事', body: '一般換気扇、ロスナイ工事。換気設備の設計から施工まで。' },
+    { icon: 'services06.svg', title: '電気施工管理', body: '全体の工程管理、打合せ、段取り。管理のみのご依頼にも対応。' },
+    { icon: 'services07.svg', title: '設計・施工', body: '低圧工事の設計から施工までワンストップで承ります。' },
+    { icon: 'services08.svg', title: '図面作成（CAD）', body: 'ベクター、プラスバイプラスを使用。施工図・竣工図に対応。' },
+  ];
+  return (
+    <section className="section services" id="services">
+      <FadeUp><div className="section__label">Services</div></FadeUp>
+      <FadeUp delay={0.08}>
+        <h2 className="section__title">電気工事の8工種を、<br />ひと声で完結。</h2>
+      </FadeUp>
+      <div className="services__grid">
+        {services.map((s, i) => (
+          <FadeUp key={i} delay={i * 0.06} y={20}>
+            <div className="service">
+              <div className="service__icon">
+                <img src={'images/' + s.icon} alt={s.title} />
+              </div>
+              <h3 className="service__title">{s.title}</h3>
+              <p className="service__body">{s.body}</p>
+            </div>
+          </FadeUp>
+        ))}
+      </div>
+      <FadeUp delay={0.5}>
+        <div style={{ textAlign: 'center', marginTop: 64 }}>
+          <a href="services.html" className="btn-primary"><span>対応工事を詳しく</span></a>
+        </div>
+      </FadeUp>
+    </section>
+  );
+}
+
+/* ================= Works ================= */
+function Works() {
+  const [lightboxSrc, setLightboxSrc] = React.useState(null);
+  const gallery = [
+    'images/IMG_3415-scaled.jpg',
+    'images/IMG_3418-scaled.jpg',
+    'images/IMG_0944-scaled.jpg',
+    'images/IMG_1230-scaled.jpg',
+    'images/7ffcc2c3f1bd7da4cc06cda414a6efa8.jpg',
+    'images/9c1d27ade95ed602ce37d265a8646759.jpg',
+    'images/be2393cd5d27555a7c2a9857829ea51a.jpg',
+    'images/IMG_4501.jpg',
+  ];
+  return (
+    <section className="section works" id="works">
+      <FadeUp><div className="section__label">Works</div></FadeUp>
+      <FadeUp delay={0.08}>
+        <h2 className="section__title">代表的な施工事例。</h2>
+      </FadeUp>
+      
+      <div className="works__featured">
+        <FadeUp y={40}>
+          <a href="works/commercial-facility-2025.html" className="works__photo">
+            <div className="works__photo__tag">FEATURED</div>
+            <img src="images/IMG_3415-scaled.jpg" alt="商業施設の施工事例" />
+          </a>
+        </FadeUp>
+        <FadeUp delay={0.2} y={40}>
+          <div className="works__details">
+            <div className="works__details__heading">
+              オフィスビル・店舗・<br />集合住宅の電気工事。
+            </div>
+            <dl>
+              <dt>Type</dt>
+              <dd>商業施設 / 店舗工事</dd>
+              <dt>Scope</dt>
+              <dd>幹線工事 / 2次側配線全般 / 弱電工事</dd>
+              <dt>Scale</dt>
+              <dd>3,000㎡ / 工期 4ヶ月 / 3,000〜4,000万円</dd>
+            </dl>
+          </div>
+        </FadeUp>
+      </div>
+
+      <FadeUp>
+        <div className="works__gallery">
+          {gallery.map((src, i) => (
+            <motion.div key={src} className="works__gallery__item"
+              initial={{ opacity: 0, scale: 0.92 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.7, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}>
+              <img src={src} alt={'施工事例 ' + (i + 1)} loading="lazy" onClick={() => setLightboxSrc(src)} />
+            </motion.div>
+          ))}
+        </div>
+      </FadeUp>
+
+      <div className="clients">
+        <FadeUp>
+          <div className="clients__label">Long-term partners</div>
+        </FadeUp>
+        <FadeUp delay={0.1}>
+          <div className="clients__list">
+            <div className="client"><span className="client__name">アクシスジャパン様</span><span className="client__years">12 years</span></div>
+            <div className="client"><span className="client__name">ドラフト様</span><span className="client__years">10 years</span></div>
+            <div className="client"><span className="client__name">アイデックス様</span><span className="client__years">4 years</span></div>
+            <div className="client"><span className="client__name">他 中小企業 10社以上</span></div>
+          </div>
+        </FadeUp>
+      </div>
+      <FadeUp delay={0.5}>
+        <div style={{ textAlign: 'center', marginTop: 64 }}>
+          <a href="works.html" className="btn-primary"><span>施工事例を詳しく</span></a>
+        </div>
+      </FadeUp>
+
+      {/* Lightbox */}
+      <div className={`lightbox${lightboxSrc ? ' lightbox--open' : ''}`} onClick={() => setLightboxSrc(null)}>
+        <button className="lightbox__close" onClick={() => setLightboxSrc(null)} />
+        {lightboxSrc && <img src={lightboxSrc} alt="拡大表示" onClick={(e) => e.stopPropagation()} style={{cursor:'default'}} />}
+      </div>
+    </section>
+  );
+}
+
+/* ================= Trust ================= */
+function Trust() {
+  const blocks = [
+    { title: '建設業許可', items: ['埼玉県知事許可（般-7）', '第78709号', '令和7年9月取得', '電気工事業（一般）'] },
+    { title: '有資格者', items: ['第一種電気工事士 1名', '第二種電気工事士 3名', '1級電気工事施工管理技士', '※有資格者多数在籍'] },
+    { title: '体制', items: ['役員 2名 / 正社員 6名', '協力会社 常時3社', '職人 20名規模', '社用車両 6台'] },
+    { title: '加入保険', items: ['健康保険・厚生年金', '雇用保険・労災保険', '建設業退職金共済', '請負業者賠償責任保険'] },
+  ];
+  return (
+    <section className="section trust" id="company">
+      <FadeUp><div className="section__label">Trust</div></FadeUp>
+      <FadeUp delay={0.08}>
+        <h2 className="section__title">信頼の、客観的なかたち。</h2>
+      </FadeUp>
+      <div className="trust__grid">
+        {blocks.map((b, i) => (
+          <FadeUp key={i} delay={i * 0.1}>
+            <div className="trust__block">
+              <h3>{b.title}</h3>
+              <ul>{b.items.map((it, j) => <li key={j}>{it}</li>)}</ul>
+            </div>
+          </FadeUp>
+        ))}
+      </div>
+      <FadeUp delay={0.5}>
+        <div style={{ textAlign: 'center', marginTop: 64 }}>
+          <a href="company.html" className="btn-primary"><span>会社情報を詳しく</span></a>
+        </div>
+      </FadeUp>
+    </section>
+  );
+}
+
+/* ================= CEO Message ================= */
+function CeoMessage() {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef, offset: ['start end', 'end start'] });
+  const photoY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
+  return (
+    <section className="ceo-section" ref={targetRef}>
+      <div className="ceo__inner">
+        <div className="ceo__photo">
+          <motion.div style={{ y: photoY, position: 'absolute', inset: '-10% 0', width: '100%' }}>
+            <img src="images/slide01.jpg" alt="代表 河西 茂樹" />
+          </motion.div>
+          <div className="ceo__photo__label">REPRESENTATIVE</div>
+        </div>
+        <div className="ceo__text">
+          <FadeUp>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '0.4em', color: 'var(--sage-primary)', marginBottom: 24 }}>
+              ─ Message from CEO
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <p className="ceo__quote">
+              目の前の現場に、<br />誠実に向き合い続ける。
+            </p>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div className="ceo__body">
+              <p>祖父も父も電気の仕事をしていた家庭で育ち、自然とこの道に進みました。結婚して家族を持ったとき、「他人に負けない経済力をつけて、家族を守りたい」と思ったことが、独立のきっかけでした。それから14年、地に足をつけて、ひとつひとつの現場を大切にしてきました。</p>
+              <p>私たちが大切にしているのは、報告・連絡・相談を徹底すること。そして、目の前の現場に誠実に向き合うこと。これからも、お客様と長く続くお付き合いができる、信頼されるパートナーであり続けたいと思っています。</p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.3}>
+            <div className="ceo__name">
+              株式会社シゲ電気 代表取締役
+              <strong>河西 茂樹</strong>
+            </div>
+          </FadeUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================= Recruit ================= */
+function Recruit() {
+  return (
+    <section className="recruit">
+      <div className="recruit__inner">
+        <FadeUp>
+          <div>
+            <div className="recruit__label">─ Recruit</div>
+            <h2 className="recruit__title">
+              共に成長してくれる<br />仲間を、募集しています。
+            </h2>
+            <p className="recruit__body">
+              電気工事士・現場管理を年間2名採用予定です。<br />
+              未経験は職人さんのみ、現場管理は3年以上の経験者を対象としています。
+            </p>
+          </div>
+        </FadeUp>
+        <FadeUp delay={0.2}>
+          <a href="recruit.html" className="btn-outline"><span>採用情報を見る →</span></a>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ================= Contact ================= */
+function Contact() {
+  return (
+    <section className="contact" id="contact">
+      <div className="contact__inner">
+        <FadeUp><div className="section__label">Contact</div></FadeUp>
+        <FadeUp delay={0.08}>
+          <h2 className="section__title">
+            まずは、お気軽に<br />ご相談ください。
+          </h2>
+        </FadeUp>
+        <div className="contact__grid">
+          <FadeUp delay={0.1}>
+            <div className="contact__card">
+              <h3>By phone</h3>
+              <div className="contact__tel">048-201-6222</div>
+              <div className="contact__hours">平日 8:00 〜 17:00 (日・祝定休)</div>
+              <div style={{ marginTop: 24, fontSize: 13, color: 'var(--text-gray)', lineHeight: 1.9 }}>
+                お電話でのご相談を歓迎します。<br />
+                現場の規模感だけでもお聞かせください。
+              </div>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div className="contact__card">
+              <h3>Online form</h3>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--text-sumi)', marginBottom: 12, lineHeight: 1.6 }}>
+                ご相談・お見積もり<br />フォームから
+              </div>
+              <div className="contact__hours">24時間お受けします</div>
+              <a href="contact.html" className="btn-primary" style={{ marginTop: 32 }}><span>フォームへ進む</span></a>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.3}>
+            <div className="contact__card">
+              <h3>Capacity</h3>
+              <ul className="contact__items">
+                <li><strong>対応エリア</strong>関東全域</li>
+                <li><strong>同時並行可能数</strong>5現場</li>
+                <li><strong>緊急対応</strong>24時間体制</li>
+                <li><strong>見積もり目安</strong>1週間以内</li>
+              </ul>
+            </div>
+          </FadeUp>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================= Footer ================= */
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo">
+            <img src="images/logo.svg" alt="株式会社シゲ電気" />
+          </div>
+          <p className="footer__address">
+            〒352-0012<br />
+            埼玉県新座市野火止2-4-14<br />
+            営業時間 8:00 〜 17:00 ｜ 日・祝定休
+          </p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+/* ================= App ================= */
+function App() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 2600);
+    document.body.style.overflow = 'hidden';
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (!loading) document.body.style.overflow = '';
+  }, [loading]);
+  return (
+    <>
+      <AnimatePresence>
+        {loading && <LoadingScreen key="loader" />}
+      </AnimatePresence>
+      <Header />
+      <main>
+        <Hero />
+        <Stats />
+        <Reasons />
+        <Services />
+        <Works />
+        <Trust />
+        <CeoMessage />
+        <Recruit />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
