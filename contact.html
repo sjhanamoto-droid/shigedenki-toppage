@@ -186,12 +186,37 @@ function BottomCTA({ title }) {
 }
 
 
+// Web3Forms アクセスキー（web3forms.com で登録した受信メールに紐づく）
+// このキーは公開しても安全です（送信先メールアドレスに紐づくため）。
+const WEB3FORMS_ACCESS_KEY = "d05057fa-4f2c-4341-b3dd-d5af29a045d4";
+
 function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const onSubmit = (e) => {
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4500);
+    setStatus('sending');
+    const formData = new FormData(e.target);
+    formData.append('access_key', WEB3FORMS_ACCESS_KEY);
+    formData.append('subject', 'シゲ電気サイトからのお問い合わせ');
+    formData.append('from_name', 'シゲ電気 お問い合わせフォーム');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        e.target.reset();
+        setStatus('success');
+        // 送信完了ページへ遷移（計測しやすいよう独立URLにしている）
+        window.location.href = 'thanks.html';
+        return;
+      }
+      setStatus('error');
+    } catch (err) {
+      setStatus('error');
+    }
   };
 
   return (
@@ -206,7 +231,8 @@ function ContactPage() {
       <section className="section">
         <div className="contact__grid" style={{ marginTop: 0 }}>
           <FadeUp delay={0.1}>
-            <div className="contact__card">
+            <a className="contact__card contact__card--action" href="tel:048-201-6222"
+              style={{ display: 'block', textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
               <h3>By phone</h3>
               <div className="contact__tel">048-201-6222</div>
               <div className="contact__hours">平日 8:00 〜 17:00（日・祝定休）</div>
@@ -214,10 +240,12 @@ function ContactPage() {
                 お電話でのご相談を歓迎します。<br />
                 現場の規模感だけでもお聞かせください。
               </p>
-            </div>
+              <div style={{ marginTop: 24, fontSize: 12, letterSpacing: '0.1em', color: 'var(--sage-primary)' }}>電話をかける →</div>
+            </a>
           </FadeUp>
           <FadeUp delay={0.2}>
-            <div className="contact__card">
+            <a className="contact__card contact__card--action" href="#inquiry-form"
+              style={{ display: 'block', textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
               <h3>Online form</h3>
               <p style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--text-sumi)', marginBottom: 12, lineHeight: 1.6 }}>
                 フォームから<br />ご相談ください
@@ -227,7 +255,8 @@ function ContactPage() {
                 下のフォームに必要事項をご記入のうえ送信してください。<br />
                 3営業日以内にご返信いたします。
               </p>
-            </div>
+              <div style={{ marginTop: 24, fontSize: 12, letterSpacing: '0.1em', color: 'var(--sage-primary)' }}>フォームへ移動 →</div>
+            </a>
           </FadeUp>
           <FadeUp delay={0.3}>
             <div className="contact__card">
@@ -243,7 +272,7 @@ function ContactPage() {
         </div>
       </section>
 
-      <section className="section section--narrow">
+      <section id="inquiry-form" className="section section--narrow" style={{ scrollMarginTop: '100px' }}>
         <FadeUp><div className="section__label">Inquiry form</div></FadeUp>
         <FadeUp delay={0.08}>
           <h2 className="section__title">お問い合わせフォーム</h2>
@@ -256,29 +285,30 @@ function ContactPage() {
         </FadeUp>
         <FadeUp delay={0.2}>
           <form className="form" onSubmit={onSubmit}>
+            <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex="-1" autoComplete="off" />
             <div className="form__field">
               <label className="form__label">Company / 会社名 <span className="required">*</span></label>
-              <input className="form__input" type="text" required placeholder="株式会社○○" />
+              <input className="form__input" type="text" name="会社名" required placeholder="株式会社○○" />
             </div>
             <div className="form__field">
               <label className="form__label">Name / ご担当者名 <span className="required">*</span></label>
-              <input className="form__input" type="text" required placeholder="山田 太郎" />
+              <input className="form__input" type="text" name="ご担当者名" required placeholder="山田 太郎" />
             </div>
             <div className="form__field">
               <label className="form__label">Department / 部署・役職 <small>任意</small></label>
-              <input className="form__input" type="text" placeholder="工事部・現場監督" />
+              <input className="form__input" type="text" name="部署・役職" placeholder="工事部・現場監督" />
             </div>
             <div className="form__field">
               <label className="form__label">Phone / 電話番号 <span className="required">*</span></label>
-              <input className="form__input" type="tel" required placeholder="03-0000-0000" />
+              <input className="form__input" type="tel" name="電話番号" required placeholder="03-0000-0000" />
             </div>
             <div className="form__field">
               <label className="form__label">Email / メールアドレス <span className="required">*</span></label>
-              <input className="form__input" type="email" required placeholder="example@company.co.jp" />
+              <input className="form__input" type="email" name="email" required placeholder="example@company.co.jp" />
             </div>
             <div className="form__field">
               <label className="form__label">Subject / お問い合わせ種別</label>
-              <select className="form__select" defaultValue="">
+              <select className="form__select" name="お問い合わせ種別" defaultValue="">
                 <option value="">選択してください</option>
                 <option>新規案件のご相談</option>
                 <option>お見積もりのご依頼</option>
@@ -288,7 +318,7 @@ function ContactPage() {
             </div>
             <div className="form__field">
               <label className="form__label">Project type / 物件種別 <small>任意</small></label>
-              <select className="form__select" defaultValue="">
+              <select className="form__select" name="物件種別" defaultValue="">
                 <option value="">選択してください</option>
                 <option>オフィスビル</option>
                 <option>商業施設・店舗</option>
@@ -299,21 +329,30 @@ function ContactPage() {
             </div>
             <div className="form__field">
               <label className="form__label">Scale / 概算規模 <small>任意</small></label>
-              <input className="form__input" type="text" placeholder="例: 500㎡程度 / 300万円程度 など" />
+              <input className="form__input" type="text" name="概算規模" placeholder="例: 500㎡程度 / 300万円程度 など" />
             </div>
             <div className="form__field form__field--full">
               <label className="form__label">Message / ご相談内容 <span className="required">*</span></label>
-              <textarea className="form__textarea" required placeholder="現場の概要、工期、ご希望時期などを差し支えない範囲でお聞かせください"></textarea>
+              <textarea className="form__textarea" name="ご相談内容" required placeholder="現場の概要、工期、ご希望時期などを差し支えない範囲でお聞かせください"></textarea>
             </div>
             <div className="form__submit form__field--full">
-              <button type="submit" className="btn-primary"><span>{submitted ? '送信完了しました' : '送信する'}</span></button>
-              {submitted && (
+              <button type="submit" className="btn-primary" disabled={status === 'sending'}>
+                <span>{status === 'sending' ? '送信中...' : status === 'success' ? '送信完了しました' : '送信する'}</span>
+              </button>
+              {status === 'success' && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   style={{ marginTop: 16, color: 'var(--sage-primary)', fontSize: 13, letterSpacing: '0.05em' }}>
-                  お問い合わせありがとうございます。3営業日以内にご返信いたします。<br />
-                  <small style={{ color: 'var(--text-light)', fontSize: 11 }}>※ プロトタイプのため実際の送信は行われません</small>
+                  送信しました。完了ページへ移動します…
+                </motion.p>
+              )}
+              {status === 'error' && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ marginTop: 16, color: '#c0392b', fontSize: 13, letterSpacing: '0.05em', lineHeight: 1.9 }}>
+                  送信に失敗しました。お手数ですが、お電話（048-201-6222）にてお問い合わせください。
                 </motion.p>
               )}
             </div>

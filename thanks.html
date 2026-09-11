@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>送信完了 ｜ 株式会社シゲ電気</title>
+<meta name="description" content="お問い合わせありがとうございます。内容を確認のうえ、3営業日以内に担当者よりご返信いたします。">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18",
+    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, useInView } from 'framer-motion';
+
+
+/* ========== Shared ========== */
+function Header({ current }) {
+  const [scrolled, setScrolled] = useState(true);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const isActive = (k) => current === k ? 'active' : '';
+  return (
+    <motion.header
+      className={'header ' + (scrolled ? 'header--scrolled' : '')}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}>
+      <a href="index.html" className="header__logo">
+        <img src="images/logo.svg" alt="株式会社シゲ電気" />
+      </a>
+      <nav className="header__nav">
+        <a href="why-us.html" className={isActive('why')}>選ばれる理由</a>
+        <a href="services.html" className={isActive('services')}>対応工事</a>
+        <a href="works.html" className={isActive('works')}>施工事例</a>
+        <a href="company.html" className={isActive('company')}>会社情報</a>
+        <a href="recruit.html" className={isActive('recruit')}>採用情報</a>
+        <a href="contact.html" className={isActive('contact')}>お問い合わせ</a>
+      </nav>
+    </motion.header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div>
+          <div className="footer__logo"><img src="images/logo.svg" alt="株式会社シゲ電気" /></div>
+          <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
+          <div className="footer__tel">048-201-6222</div>
+        </div>
+        <div className="footer__nav">
+          <a href="why-us.html">選ばれる理由</a>
+          <a href="services.html">対応工事</a>
+          <a href="works.html">施工事例</a>
+          <a href="company.html">会社情報</a>
+          <a href="recruit.html">採用情報</a>
+          <a href="contact.html">お問い合わせ</a>
+        </div>
+      </div>
+      <div className="footer__copyright">© SHIGE DENKI CO., LTD.</div>
+    </footer>
+  );
+}
+
+function FadeUp({ children, delay = 0, y = 32, duration = 0.9 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}>{children}</motion.div>
+  );
+}
+
+function PageHero({ image, label, title, sub, breadcrumb, compact }) {
+  return (
+    <>
+      <section className={'page-hero' + (compact ? ' page-hero--compact' : '')}>
+        <div className="page-hero__bg">
+          <motion.img src={image} alt=""
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{ scale: 1.02, opacity: 1 }}
+            transition={{ scale: { duration: 9, ease: 'linear' }, opacity: { duration: 1.6 } }} />
+        </div>
+        <div className="page-hero__overlay"></div>
+        <div className="page-hero__content">
+          <motion.div className="page-hero__small"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.9 }}>{label}</motion.div>
+          <motion.h1 className="page-hero__title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            dangerouslySetInnerHTML={{ __html: title }} />
+          {sub && <motion.p className="page-hero__sub"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 1.0 }}>{sub}</motion.p>}
+        </div>
+      </section>
+      <nav className="breadcrumb">
+        <a href="index.html">HOME</a>
+        <span className="breadcrumb__sep">/</span>
+        <a href="contact.html">お問い合わせ</a>
+        <span className="breadcrumb__sep">/</span>
+        <span>{breadcrumb}</span>
+      </nav>
+    </>
+  );
+}
+
+
+/* ========== Page ========== */
+const FLOW = [
+  {
+    num: '01',
+    title: 'お問い合わせ受付',
+    body: 'ご入力いただいた内容が担当者に届いています。自動返信メールはお送りしていないため、このページが受付完了のお知らせとなります。',
+  },
+  {
+    num: '02',
+    title: '担当者よりご返信',
+    body: '内容を確認のうえ、3営業日以内にメールまたはお電話でご連絡いたします。お急ぎの場合はお電話ください。',
+  },
+  {
+    num: '03',
+    title: 'お打ち合わせ・お見積もり',
+    body: '現場の状況やご希望の工期をうかがい、お見積もりをご提出します。ご相談の段階でも費用はいただきません。',
+  },
+];
+
+function ThanksPage() {
+  return (
+    <>
+      <PageHero
+        image="images/pagehead.jpg"
+        label="THANK YOU"
+        title="送信が完了しました。"
+        sub="お問い合わせいただき、誠にありがとうございます。"
+        breadcrumb="送信完了"
+        compact />
+
+      <section className="section section--narrow">
+        <FadeUp><div className="section__label">Received</div></FadeUp>
+        <FadeUp delay={0.08}>
+          <h2 className="section__title">3営業日以内に、<br />担当者よりご返信いたします。</h2>
+        </FadeUp>
+        <FadeUp delay={0.15}>
+          <p className="section__lead">
+            このたびは株式会社シゲ電気へお問い合わせいただき、誠にありがとうございます。<br />
+            ご相談の内容を確認のうえ、担当者より順次ご連絡いたします。今しばらくお待ちください。
+          </p>
+        </FadeUp>
+
+        <FadeUp delay={0.2}>
+          <div className="timeline">
+            {FLOW.map((f) => (
+              <div className="timeline__item" key={f.num}>
+                <div className="timeline__year">{f.num}</div>
+                <div className="timeline__title">{f.title}</div>
+                <p className="timeline__body">{f.body}</p>
+              </div>
+            ))}
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.25}>
+          <div className="contact__card" style={{ marginTop: '5rem' }}>
+            <h3>By phone</h3>
+            <a className="contact__tel" href="tel:048-201-6222" style={{ display: 'block' }}>048-201-6222</a>
+            <div className="contact__hours">平日 8:00 〜 17:00（日・祝定休）</div>
+            <p style={{ marginTop: 24, fontSize: 13, color: 'var(--text-gray)', lineHeight: 1.9 }}>
+              お急ぎの場合や、数日経っても返信が届かない場合は、お手数ですがお電話ください。<br />
+              迷惑メールフォルダに振り分けられている場合もございますので、あわせてご確認をお願いいたします。
+            </p>
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.3}>
+          <div style={{ marginTop: '4rem', display: 'flex', flexWrap: 'wrap', gap: 20 }}>
+            <a href="index.html" className="btn-primary"><span>トップページへ戻る</span></a>
+            <a href="works.html" className="btn-outline btn-outline--dark"><span>施工事例を見る</span></a>
+          </div>
+        </FadeUp>
+      </section>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Header current="contact" />
+      <main><ThanksPage /></main>
+      <Footer />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
