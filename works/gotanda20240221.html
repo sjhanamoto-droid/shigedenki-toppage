@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"五反田_事務所改修工事","tag":"OFFICE","type":"office","year":"2024","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"店舗の既存照明をLEDに更新する工事を実施しました。","coverImage":"../images/works/gotanda20240221-cover.jpg","galleryImages":["../images/works/gotanda20240221-gallery-1.jpg","../images/works/gotanda20240221-gallery-2.jpg","../images/works/gotanda20240221-gallery-3.jpg","../images/works/gotanda20240221-gallery-4.jpg"],"prev":{"slug":"ikebukuro20241015","title":"池袋_店舗改修工事"},"next":{"slug":"musashikosugi20240212","title":"武蔵小杉_商業ビル共用照明交換"}};
+const pageData = {"title":"五反田_事務所改修工事","tag":"OFFICE","type":"office","year":"2024","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"事務所フロアの改修にともなう照明のLED化工事です。あわせてOAフロア内の電源および情報用配線を施工しました。基準階の執務フロア全体が対象となる規模の工事です。\n\n## 施工内容\n\nシステム天井のグリッドに合わせ、LEDのベースライトを配置しました。既存器具を撤去し、天井材の開口寸法に合わせて新しい器具を納めています。誘導灯の更新もあわせて実施しました。\n\n床側では、OAフロア内に電源用と情報用の配線を敷設し、島配置のデスクに合わせて分岐位置を割り付けています。写真は配線敷設中の段階で、フロア材を開けた状態で幹線から各島へのケーブルを配線しているところです。\n\n## OAフロア内の配線\n\nOAフロアの配線は、レイアウト変更が前提になる部分です。竣工時点で最適でも、部署の入れ替えやデスクの増減で必要な位置は変わります。\n\n本件では、想定されるレイアウト変更に対応できるよう、分岐点を余裕をもって配置し、増設用の経路を残しました。電源線と情報用配線は離隔を確保して敷設し、交差する箇所では角度をつけています。フロア内は点検の頻度が低いため、接続部の処理と固定の確実さが特に重要になります。\n\n## 事務所照明のLED化\n\n執務空間の照明は、机上面の明るさだけでなく、均一性とまぶしさの抑制が求められます。器具の配置ピッチが同じでも、配光が変わると机上の明るさの分布は変わります。\n\n本件では、更新前の照度分布を確認したうえで器具を選定し、設置後に机上面の照度を実測して計画値を満たしていることを確かめました。非常用照明と誘導灯についても、法令上必要な性能を確保しています。\n\n## レイアウト変更への備え\n\n事務所は、数年単位で部署の構成や人数が変わります。竣工時のレイアウトが長く続くことは少なく、デスクの島の位置や数は繰り返し変更されます。\n\nこのとき、床下の配線に余裕がないと、レイアウト変更のたびに配線工事が必要になります。逆に、分岐点を適切な間隔で配置し、増設用の経路を残しておけば、多くの変更は配線の付け替えだけで対応できます。\n\n本件では、想定される変更の範囲を確認したうえで分岐点を配置しました。竣工時の費用だけでなく、その後の運用にかかる手間と費用を含めて検討することをおすすめしています。\n\n執務フロアの工事は、入居のスケジュールが決まっている場合がほとんどです。本件でも各工程の完了時期から逆算して段取りを組み、天井側と床側の作業を並行させて工期内に収めました。","coverImage":"../images/works/gotanda20240221-cover.jpg","galleryImages":["../images/works/gotanda20240221-gallery-1.jpg","../images/works/gotanda20240221-gallery-2.jpg","../images/works/gotanda20240221-gallery-3.jpg","../images/works/gotanda20240221-gallery-4.jpg"],"prev":{"slug":"ikebukuro20241015","title":"池袋_店舗改修工事"},"next":{"slug":"musashikosugi20240212","title":"武蔵小杉_商業ビル共用照明交換"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

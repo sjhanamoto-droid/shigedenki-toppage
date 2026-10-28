@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"武蔵小杉_商業ビル共用照明交換","tag":"COMMERCIAL","type":"commercial","year":"2024","scale":"改修案件","scope":"配電盤更新 / 分電盤更新","location":"神奈川県","duration":"","budget":"","body":"老朽化した配電盤・分電盤の更新工事を実施しました。","coverImage":"../images/works/musashikosugi20240212-cover.jpg","galleryImages":["../images/works/musashikosugi20240212-gallery-1.jpg","../images/works/musashikosugi20240212-gallery-2.jpg","../images/works/musashikosugi20240212-gallery-3.jpg"],"prev":{"slug":"gotanda20240221","title":"五反田_事務所改修工事"},"next":{"slug":"asakusabashi20240317","title":"浅草橋_店舗改修工事"}};
+const pageData = {"title":"武蔵小杉_商業ビル共用照明交換","tag":"COMMERCIAL","type":"commercial","year":"2024","scale":"改修案件","scope":"配電盤更新 / 分電盤更新","location":"神奈川県","duration":"","budget":"","body":"商業ビルの共用部照明の交換工事です。あわせて、老朽化した配電盤および分電盤の更新を担当しました。共用部は建物の利用が続く中で施工する必要があり、停電をともなう作業の計画が工事全体の鍵となります。\n\n## 施工内容\n\nエントランスホールから通路にかけて、既存照明器具を更新しました。壁面を洗う建築化照明、天井のダウンライト、黒色の枠に納めたユニバーサルダウンライトを、既存の開口と意匠に合わせて入れ替えています。誘導灯の更新もあわせて実施しました。\n\n盤側では、既設の配電盤と分電盤を撤去し、新しい盤へ更新しています。既存回路を新盤へ移設し、回路名称を整理して盤内表示を更新しました。\n\n## 配電盤・分電盤の更新\n\n配電盤と分電盤は、建物に入ってきた電気を各所へ振り分ける設備です。内部の遮断器は経年で動作特性が変化し、絶縁物の劣化も進みます。外観からは判断しにくく、更新の時期を逃しやすい設備でもあります。\n\n更新工事では、既設回路を一度切り離して新しい盤へ移し替えます。このとき、どの回路がどこへ送っているかが正確にわかっていないと、復電時に想定外の停電を招きます。本件では事前に全回路を実測で確認し、系統図と現況の相違点を洗い出したうえで作業計画を立てました。\n\n## 建物を使いながらの更新\n\n共用部の停電は、建物の利用者全員に影響します。切替が必要な作業を夜間や休館日に集約し、通電状態を維持したまま進められる準備作業と切り分けて工程を組みました。切替当日は復電後の確認項目をあらかじめ整理し、順序どおりに確認しています。\n\n## 更新時期の目安について\n\n配電盤や分電盤は、外観からは異常が見えにくい設備です。扉を閉じた状態では内部の劣化がわからず、不具合が表面化したときには既に広い範囲に影響が及んでいることがあります。\n\n一般には、設置から一定年数が経過した盤は、内部の遮断器や絶縁物の状態を点検したうえで更新を検討します。屋外や湿気の多い場所に設置された盤は、劣化が早く進みます。\n\n判断に迷う場合は、まず盤内の状態と回路の使用状況を確認することをおすすめします。本件でも、更新の前に既設盤の状態と全回路の実態を確認したうえで、更新範囲を決めました。\n\n共用部の設備は、建物を使い続けるかぎり更新が必要になります。今回の工事で系統図と現況を一致させ、盤内表示を整理したことは、次回以降の点検や更新作業を進めやすくすることにもつながります。","coverImage":"../images/works/musashikosugi20240212-cover.jpg","galleryImages":["../images/works/musashikosugi20240212-gallery-1.jpg","../images/works/musashikosugi20240212-gallery-2.jpg","../images/works/musashikosugi20240212-gallery-3.jpg"],"prev":{"slug":"gotanda20240221","title":"五反田_事務所改修工事"},"next":{"slug":"asakusabashi20240317","title":"浅草橋_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

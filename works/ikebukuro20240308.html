@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"幹線工事 / 2次側配線","location":"東京都","duration":"","budget":"","body":"オフィスビルの内装電気工事を担当。幹線から2次側配線まで一貫して対応しました。","coverImage":"../images/works/ikebukuro20240308-cover.jpg","galleryImages":["../images/works/ikebukuro20240308-gallery-1.jpg","../images/works/ikebukuro20240308-gallery-2.jpg","../images/works/ikebukuro20240308-gallery-3.jpg","../images/works/ikebukuro20240308-gallery-4.jpg"],"prev":{"slug":"kayabacho20240102","title":"茅場町_事務所改修工事"},"next":{"slug":"kanda20250510","title":"神田_店舗改修工事"}};
+const pageData = {"title":"池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"幹線工事 / 2次側配線","location":"東京都","duration":"","budget":"","body":"カラオケ店舗の改修にともなう電気工事です。幹線工事から2次側配線までを一貫して担当しました。営業を続けながら区画ごとに進める必要があったため、既設回路を活かす範囲と新設に切り替える範囲を整理したうえで着手しています。\n\n## 施工内容\n\nエントランスから客室前の共用部にかけて、天井面にLEDダウンライトを配置しました。器具の口径と配置ピッチを場所ごとに変え、通路部は均一な明るさを、客室入口まわりは絞った配灯としています。天井見切り部には建築化照明を納めました。\n\n設備側では、天井カセット形エアコンの更新にともなう電源配線と、天井スピーカーへの配線を施工しています。写真は空調機の入替時のもので、既設天井を部分開口し、器具を養生した状態で配線接続を行っている段階です。\n\n## 幹線工事と2次側配線\n\n幹線工事は、受電設備から分電盤までの電力の大もとを構成する工事です。ここで容量や経路を誤ると、後工程すべてに影響します。2次側配線は分電盤から先、実際の照明器具やコンセント、機器へ電気を届ける部分を指します。\n\n本件では、この両方を同じ体制で担当しました。幹線を引いた者がそのまま末端まで受け持つことで、回路の振り分けや負荷のバランスを設計段階の意図どおりに反映しやすくなります。系統図と現場の実配線が食い違うことも防げます。\n\n## 営業中の店舗での進め方\n\n稼働中の店舗では、停電をともなう作業の時間帯が限られます。切替が必要な作業を営業時間外にまとめ、通電状態を維持したまま進められる作業と分けて工程を組みました。\n\n## 容量の検討について\n\nカラオケ店舗は、客室ごとの音響・映像機器、厨房設備、空調が同時に稼働します。客室数に対して必要な容量を見積もらないまま機器を増やすと、繁忙時に遮断器が動作する原因になります。\n\n幹線工事では、現在の使用状況だけでなく、将来の機器追加を見込んだ容量を検討します。既存建物の改修では、建物全体の受電容量に上限があるため、テナントに割り当てられた容量の範囲で計画を組む必要があります。\n\n本件では、既設の容量と使用状況を確認したうえで回路を振り分け、負荷が特定の系統に偏らないよう配分しました。\n\n幹線から末端まで一社で担当する体制は、工程管理の面でも利点があります。系統ごとの進捗を一元的に把握できるため、切替のタイミングを的確に判断でき、元請け様への報告も一本化できます。引き渡し時には、分電盤の回路表示を実際の系統に合わせて整理し、以降の増設や点検に対応できる状態としました。","coverImage":"../images/works/ikebukuro20240308-cover.jpg","galleryImages":["../images/works/ikebukuro20240308-gallery-1.jpg","../images/works/ikebukuro20240308-gallery-2.jpg","../images/works/ikebukuro20240308-gallery-3.jpg","../images/works/ikebukuro20240308-gallery-4.jpg"],"prev":{"slug":"kayabacho20240102","title":"茅場町_事務所改修工事"},"next":{"slug":"kanda20250510","title":"神田_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

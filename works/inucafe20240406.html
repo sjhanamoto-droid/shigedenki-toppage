@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"大型複合施設いぬカフェ_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"弱電工事 / 空調電気工事","location":"東京都","duration":"","budget":"","body":"商業ビルにおける弱電工事および空調関連の電気設備工事を担当しました。","coverImage":"../images/works/inucafe20240406-cover.jpg","galleryImages":["../images/works/inucafe20240406-gallery-1.jpg","../images/works/inucafe20240406-gallery-2.jpg","../images/works/inucafe20240406-gallery-3.jpg"],"prev":{"slug":"kanda20250510","title":"神田_店舗改修工事"},"next":{"slug":"hunabashi20240524","title":"船橋_店舗改修工事"}};
+const pageData = {"title":"大型複合施設いぬカフェ_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"弱電工事 / 空調電気工事","location":"東京都","duration":"","budget":"","body":"大型複合施設内に出店する店舗の改修工事です。弱電工事と空調関連の電気設備工事を担当しました。天井を大きく見せる計画のため、配線や器具の取付架台が客席から見える位置に多く、納まりの精度が求められる現場です。\n\n## 施工内容\n\n天井にライティングレールをグリッド状に組み、スポットライトを配置しました。高さを変えた球形ペンダント照明を多数吊り込み、造作の意匠に沿ってLEDのライン照明を回しています。壁面のサイン文字には、内部から光らせるための配線を仕込みました。\n\n空調側では、天井カセット形エアコンへの電源供給と制御配線を施工しています。弱電側は、店内放送用のスピーカー配線、防犯カメラ、レジまわりの情報用配線を担当しました。誘導灯の移設もあわせて行っています。\n\n## 弱電工事について\n\n弱電工事は、電話・LAN・放送・防犯カメラ・インターホンなど、電力そのものではなく情報や信号を扱う設備の配線工事です。電灯やコンセントの工事とは求められる条件が異なり、ノイズを拾わない経路の確保と、後から機器を入れ替えられる余裕のある配管が重要になります。\n\n本件では、電力線と弱電線の離隔を確保し、天井内で交差する箇所は角度をつけて通しています。将来の機器更新を見込み、主要な経路には呼び線を残しました。\n\n## 施設内テナントとしての制約\n\n商業施設内の工事は、施設側の共用設備との取り合い、搬入時間の制限、火気や粉塵の扱いなど、独自のルールに沿って進める必要があります。施設の管理室と作業内容を事前に共有し、届出の必要な作業を整理したうえで工程に落とし込みました。\n\n## 空調電気工事の範囲\n\n空調電気工事は、空調機そのものの設置ではなく、空調設備を動かすための電気側の工事を指します。室内機・室外機への電源供給、運転を制御するための配線、リモコンや温度センサーの配線、換気設備との連動配線などが含まれます。\n\n空調機器は設置後に機種が変更されることがあり、機種によって必要な電源仕様や制御方式が異なります。電源だけ先に用意しても、制御配線の仕様が合わなければ動きません。\n\n本件では、空調業者と機種および結線仕様を確認したうえで配線を敷設し、試運転に立ち会って動作を確認しています。\n\n弱電と空調電気はいずれも、他業種との取り合いが多い工事です。機器の仕様が固まる時期が遅くなりがちなため、確定していない部分を見越した配管と余長の確保が、後工程の自由度を左右します。","coverImage":"../images/works/inucafe20240406-cover.jpg","galleryImages":["../images/works/inucafe20240406-gallery-1.jpg","../images/works/inucafe20240406-gallery-2.jpg","../images/works/inucafe20240406-gallery-3.jpg"],"prev":{"slug":"kanda20250510","title":"神田_店舗改修工事"},"next":{"slug":"hunabashi20240524","title":"船橋_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"浅草橋_店舗改修工事","tag":"STORE\n","type":"renovation","year":"2024","scale":"改修案件","scope":"照明工事 / 配線工事","location":"東京都","duration":"","budget":"","body":"商業施設における照明設備および配線工事を担当しました。","coverImage":"../images/works/asakusabashi20240317-cover.jpg","galleryImages":["../images/works/asakusabashi20240317-gallery-1.jpg","../images/works/asakusabashi20240317-gallery-2.jpg","../images/works/asakusabashi20240317-gallery-3.jpg","../images/works/asakusabashi20240317-gallery-4.jpg","../images/works/asakusabashi20240317-gallery-5.jpg"],"prev":{"slug":"musashikosugi20240212","title":"武蔵小杉_商業ビル共用照明交換"},"next":null};
+const pageData = {"title":"浅草橋_店舗改修工事","tag":"STORE\n","type":"renovation","year":"2024","scale":"改修案件","scope":"照明工事 / 配線工事","location":"東京都","duration":"","budget":"","body":"商業施設内の店舗改修にともなう照明工事および配線工事です。什器に組み込む照明が多く、什器の製作と設置の工程に合わせて電気工事を進める必要がありました。\n\n## 施工内容\n\n天井にライティングレールを敷設し、スポットライトを配置しました。下がり天井部にはダウンライトを納め、壁の入隅に設けたニッチにはペンダント照明を吊り込んでいます。曲面の造作什器には、棚板ごとに棚下を照らすライン照明を組み込みました。\n\n配線側では、レジまわりの電源回路、防犯カメラへの配線、スイッチおよびコンセントの新設を施工しています。\n\n## 什器組み込み照明の進め方\n\n什器に照明を組み込む場合、什器が搬入されてから配線するのでは間に合いません。什器の製作図をもとに、配線の取り出し位置と必要な長さを事前に決め、壁や床の仕上げ前に電源を出しておく必要があります。\n\n本件では、什器製作者と取り出し位置をすり合わせたうえで先行配線を行いました。什器の設置後は、棚板ごとの器具を接続し、点灯を確認しながら光の向きを調整しています。\n\n## 仕上げ工程との取り合い\n\n内装の仕上げが進んだ段階での電気工事は、既に仕上がった面を傷めないことが前提になります。写真の養生や現場のメモは、他業者と作業範囲を共有しながら進めている状況を示すものです。\n\n限られた期間に複数の業者が同じ空間で作業するため、作業の順序が入れ替わることも珍しくありません。日々の進捗を共有し、先行して済ませられる作業を前倒しすることで、後工程に余裕を残すよう調整しました。\n\n## 商業施設内の工事で必要な調整\n\n商業施設に入る店舗の工事は、路面店とは進め方が異なります。施設ごとに工事区分や施工時間帯のルールが定められており、多くの場合、作業は施設の営業時間外に限られます。\n\n搬入経路や資材の一時置き場にも制限があり、作業できる時間の中で搬入から施工、片付けまでを収める必要があります。火を使う作業や粉塵の出る作業は、事前の届出が必要になることもあります。\n\n本件でも、施設側の管理室と作業内容を共有し、届出が必要な作業を整理したうえで工程を組みました。こうした調整を前提に計画を立てることが、工期を守るうえで欠かせません。\n\n什器組み込み照明と仕上げ工程の取り合いは、事前の情報共有がそのまま施工品質に表れる部分です。本件でも関係業者と早い段階で図面を突き合わせ、先行して必要な配線を出しておく段取りとしました。","coverImage":"../images/works/asakusabashi20240317-cover.jpg","galleryImages":["../images/works/asakusabashi20240317-gallery-1.jpg","../images/works/asakusabashi20240317-gallery-2.jpg","../images/works/asakusabashi20240317-gallery-3.jpg","../images/works/asakusabashi20240317-gallery-4.jpg","../images/works/asakusabashi20240317-gallery-5.jpg"],"prev":{"slug":"musashikosugi20240212","title":"武蔵小杉_商業ビル共用照明交換"},"next":null};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

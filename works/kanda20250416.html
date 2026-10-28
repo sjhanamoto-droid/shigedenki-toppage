@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"神田_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"照明工事","location":"東京都","duration":"","budget":"","body":"オフィスの天井工事に伴う照明設備およびLAN配線工事を担当しました。","coverImage":"../images/works/kanda20250416-cover.jpg","galleryImages":["../images/works/kanda20250416-gallery-1.jpg","../images/works/kanda20250416-gallery-2.jpg"],"prev":{"slug":"higashiikebukuro20240215","title":"東池袋_店舗改修工事"},"next":{"slug":"ikebukuro20241015","title":"池袋_店舗改修工事"}};
+const pageData = {"title":"神田_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"照明工事","location":"東京都","duration":"","budget":"","body":"店舗の改修にともなう照明工事です。装飾性の高いペンダント照明を主役とした計画のため、器具の吊り位置と高さの精度が仕上がりを左右する現場でした。\n\n## 施工内容\n\n球形のペンダント照明を、高さを変えながら複数配置しました。天井面にはダウンライトを納め、ペンダントで照らしきれない範囲を補っています。フロアランプ用のコンセントを床および壁面に増設しました。\n\n壁掛けモニターへの電源と信号配線、壁面スピーカーへの配線もあわせて施工しています。グリーンウォールの上部には、植栽を照らすための配線を仕込みました。\n\n## ペンダント照明の吊り込み\n\n高さを変えて複数の器具を吊る計画では、一つひとつの高さがばらつくと全体の印象が崩れます。本件では、什器とテーブルの配置が決まった段階で基準線を出し、着席時の目線に器具が入らない高さを確認しながら吊り位置を決めました。\n\n躯体現しの天井では、アンカーを打てる位置が限られます。器具の重量に対して十分な耐力を確保できる位置を選び、意匠上の配置とのずれは吊り方法を変えて調整しています。\n\n## 照明工事の範囲\n\n照明工事は、器具を取り付ける作業だけを指すものではありません。分電盤からの回路計画、スイッチの区分け、調光方式の選定、器具重量に応じた支持方法の検討までが含まれます。\n\nとくに店舗では、時間帯や用途によって必要な明るさが変わります。本件でも点灯パターンを想定してスイッチを区分し、必要な範囲だけを点灯できる構成としました。器具の交換や清掃を行う際の作業性も考慮して配置しています。\n\n## 器具選定でご相談いただくこと\n\n装飾照明を用いる計画では、意匠上の見え方と、実際の明るさの両方を満たす必要があります。デザイン性の高い器具は光の広がりが限られることが多く、それだけでは必要な明るさに届かない場合があります。\n\n本件でも、ペンダント照明だけでは客席全体の明るさが不足するため、天井のダウンライトで補う構成としました。装飾照明を主役に据えつつ、機能的な明るさは別の器具で確保する考え方です。\n\nまた、器具の重量と取付方法は早い段階で確認が必要です。重量のある器具は、天井の下地補強が必要になることがあり、内装工事の工程に影響します。\n\n装飾照明は、什器や内装の仕上がりと合わせて評価される部分です。本件でも内装工事の進捗に合わせて器具の位置を確認し、最終的な見え方を関係者と共有しながら調整を重ねました。","coverImage":"../images/works/kanda20250416-cover.jpg","galleryImages":["../images/works/kanda20250416-gallery-1.jpg","../images/works/kanda20250416-gallery-2.jpg"],"prev":{"slug":"higashiikebukuro20240215","title":"東池袋_店舗改修工事"},"next":{"slug":"ikebukuro20241015","title":"池袋_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"オフィスビルの内装電気工事を担当。幹線から2次側配線まで一貫して対応しました。","coverImage":"../images/works/ikebukuro20241015-cover.jpg","galleryImages":["../images/works/ikebukuro20241015-gallery-1.jpg","../images/works/ikebukuro20241015-gallery-2.jpg"],"prev":{"slug":"kanda20250416","title":"神田_店舗改修工事"},"next":{"slug":"gotanda20240221","title":"五反田_事務所改修工事"}};
+const pageData = {"title":"池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"飲食店舗の既存照明をLEDに更新する工事です。カウンターと客席で求められる明るさが異なるため、場所ごとに光の質を変える計画としました。\n\n## 施工内容\n\nカウンター上部の棚下にライン照明を納め、手元を照らす明るさを確保しました。天井にはダウンライトを配置し、客席側の壁面には壁を洗うように照らす間接照明を仕込んでいます。奥の客席にはレールを敷設し、スポットライトでテーブル面を照らしました。\n\n厨房機器側では、レンジフード、冷蔵ショーケース、ビールサーバーへの電源回路を整理しています。壁掛けエアコンへの電源配線もあわせて施工しました。\n\n## LED化で見直した点\n\n蛍光灯や白熱灯からLEDへ更新する際は、単に光源を置き換えるだけでは以前と同じ見え方になりません。配光の広がり方が変わるため、同じ位置に同じ数を付けても明るい場所と暗い場所の差が出ます。\n\n本件では、更新前の明るさを実測したうえで器具の配光と配置を検討しました。飲食店では料理や飲み物の色の見え方が印象を左右するため、演色性を確認して器具を選定しています。\n\n## 調光の確認\n\n調光を行う場合、調光器と光源の組み合わせによっては、明るさを絞った際にちらつきや不点灯が起きることがあります。カタログ上の適合だけでは判断できず、実機での確認が必要です。\n\n本件では器具を仮設置した状態で調光域の全範囲を確認し、下限側で問題が出ないことを確かめてから本設置しました。厨房機器の電源についても、同時に使用したときの負荷を確認し、回路を分けています。\n\n## 厨房まわりの電源\n\n飲食店舗では、厨房機器の電源計画が営業の安定性に直結します。冷蔵・冷凍機器は常時稼働し、停止すると在庫に影響が出るため、他の機器と回路を分けることが基本です。\n\n加熱機器や製氷機のように起動時の電流が大きい機器は、同じ回路にまとめると遮断器が動作しやすくなります。機器ごとの容量を確認し、同時に使用する組み合わせを想定して回路を振り分ける必要があります。\n\n水を扱う場所では、漏電に対する保護も欠かせません。本件では、厨房機器の構成を確認したうえで回路を分け、必要な保護を確保しています。\n\n飲食店舗の電気工事は、営業が始まってからの使い方に耐えることが前提です。本件でも想定される同時使用の状況を確認したうえで回路を構成し、引き渡し時に分電盤の回路表示を整理しました。更新後は各回路の電流値を実測し、想定した負荷の範囲に収まっていることを確認したうえで引き渡しました。","coverImage":"../images/works/ikebukuro20241015-cover.jpg","galleryImages":["../images/works/ikebukuro20241015-gallery-1.jpg","../images/works/ikebukuro20241015-gallery-2.jpg"],"prev":{"slug":"kanda20250416","title":"神田_店舗改修工事"},"next":{"slug":"gotanda20240221","title":"五反田_事務所改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

@@ -1,8 +1,144 @@
 {
-  "buildCommand": "node scripts/build-works.mjs",
-  "outputDirectory": ".",
+  "buildCommand": "node scripts/build-works.mjs && node scripts/build-site.mjs",
+  "outputDirectory": "dist",
   "framework": null,
-  "rewrites": [
-    { "source": "/works/:slug", "destination": "/works/:slug.html" }
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.shigedenki.jp"
+        }
+      ],
+      "destination": "https://shigedenki.jp/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-building-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-building-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-facility-2025.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-facility-2025",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-lighting-2025.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/commercial-lighting-2025",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-ceiling-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-ceiling-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-interior-2025.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-interior-2025",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-power-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/office-power-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/panel-renewal-2025.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/panel-renewal-2025",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/renovation-maintenance-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/renovation-maintenance-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/residential-electrical-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/residential-electrical-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-led-renovation-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-led-renovation-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-led-update-2026.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-led-update-2026",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-low-voltage-2024.html",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/shop-low-voltage-2024",
+      "destination": "/works.html",
+      "permanent": true
+    },
+    {
+      "source": "/works/:slug([^.]+)",
+      "destination": "/works/:slug.html",
+      "permanent": true
+    }
   ]
 }

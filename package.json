@@ -4,10 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-works.mjs"
+    "build": "node scripts/build-works.mjs && node scripts/build-site.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "build:works": "node scripts/build-works.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.0",
-    "dotenv": "^16.4.0"
+    "dotenv": "^16.4.0",
+    "esbuild": "^0.25.12",
+    "framer-motion": "^11.18.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

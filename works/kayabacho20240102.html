@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"茅場町_事務所改修工事","tag":"OFFICE","type":"office","year":"2024","scale":"改修案件","scope":"照明工事","location":"東京都","duration":"","budget":"","body":"オフィスビルの動力幹線工事を担当。安定した電力供給を実現しました。","coverImage":"../images/works/kayabacho20240102-cover.jpg","galleryImages":["../images/works/kayabacho20240102-gallery-1.jpg","../images/works/kayabacho20240102-gallery-2.jpg","../images/works/kayabacho20240102-gallery-3.jpg","../images/works/kayabacho20240102-gallery-4.jpg","../images/works/kayabacho20240102-gallery-5.jpg"],"prev":null,"next":{"slug":"ikebukuro20240308","title":"池袋_店舗改修工事"}};
+const pageData = {"title":"茅場町_事務所改修工事","tag":"OFFICE","type":"office","year":"2024","scale":"改修案件","scope":"照明工事","location":"東京都","duration":"","budget":"","body":"事務所ビルの一室を、執務スペースとコミュニケーションスペースを兼ねたラウンジへ仕上げる改修工事です。天井は躯体を見せるスケルトン仕様のため、黒く塗装した梁やダクトの間を縫うように配線経路を確保し、照明器具を納めました。仕上げ材で隠せる部分がなく、配線の通し方そのものが意匠の一部になる現場です。\n\n## 施工内容\n\n天井面にライティングレールを敷設し、黒色のスポットライトを配置しました。ブース席の上部にはペンダント照明を吊り込み、壁と天井の取り合いには建築化照明を仕込んでいます。造作棚の内部には棚板を照らすライン照明を納め、木質仕上げの壁面にはダウンライトを配置しました。\n\n電源側では、給湯カウンターへのコンセント増設、大型テーブル上の配線口への電源および情報用配線の引き込み、個室ブースごとの照明回路の分岐を行っています。天井カセット形エアコンへの電源供給も本工事の範囲に含まれます。\n\n## 現場での調整\n\nスケルトン天井の改修では、既設の配管・ダクト・スプリンクラー配管との干渉を避けながら、レールや器具の取付位置を決める必要があります。図面どおりに納まらない箇所が必ず出るため、内装業者や空調業者と現場で取り合いを確認しながら経路を確定させました。\n\n## 照明の納まりについて\n\n建築化照明と棚下のライン照明は、器具の位置が数センチずれるだけで光の出方が変わります。点灯確認をしながら取付位置とテープライトの貼り位置を微調整し、光源が直接目に入らないよう見切り材の内側に納めています。ブース席のペンダントは、座ったときの目線と什器の配置に合わせて吊り下げ高さを揃えました。\n\n## 事務所をラウンジ化する際の電気工事\n\n執務専用のフロアをラウンジやコミュニケーションスペースへ変える場合、必要になる電気設備は従来の事務所とは変わります。デスクごとの固定的な電源ではなく、什器の配置換えに対応できる電源の取り方が求められます。\n\nまた、打合せや来客対応に使う空間では、照明の明るさを一定に保つのではなく、用途に応じて切り替えられることが重視されます。本件でも、全体を明るく照らす回路と、間接照明だけを点灯させる回路を分けて構成しました。\n\n天井を躯体現しにする計画では、配線の見え方が仕上がりに直結します。計画段階で配線経路の方針を決めておくと、施工後の手戻りを避けられます。\n\nなお本件は、内装・空調・什器の各工程と並行して進めた工事です。電気工事は単独で完結せず、他工程の納まりが決まってはじめて確定する部分が多くあります。着工前に取り合いを詰めておくことが、結果として工期の安定につながります。","coverImage":"../images/works/kayabacho20240102-cover.jpg","galleryImages":["../images/works/kayabacho20240102-gallery-1.jpg","../images/works/kayabacho20240102-gallery-2.jpg","../images/works/kayabacho20240102-gallery-3.jpg","../images/works/kayabacho20240102-gallery-4.jpg","../images/works/kayabacho20240102-gallery-5.jpg"],"prev":null,"next":{"slug":"ikebukuro20240308","title":"池袋_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

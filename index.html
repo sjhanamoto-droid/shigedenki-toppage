@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -456,6 +462,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
   margin-top:1.5rem;font-family:var(--font-display);font-size:24px;
   font-weight:300;letter-spacing:0.05em;color:var(--bg-warm);
 }
+a.hero__tel,a.contact__tel,a.footer__tel{display:block}
 .footer__nav{
   display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
   font-family:var(--font-serif);font-size:13px;letter-spacing:0.05em;
@@ -641,10 +648,10 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 1.2 }}>
           <a href="contact.html" className="btn-primary"><span>お見積もり・ご相談</span></a>
-          <div className="hero__tel">
+          <a className="hero__tel" href="tel:048-201-6222">
             048-201-6222
             <small>平日 8:00 〜 17:00</small>
-          </div>
+          </a>
         </motion.div>
       </div>
       <motion.div className="hero__scroll"
@@ -820,9 +827,9 @@ function Works() {
       
       <div className="works__featured">
         <FadeUp y={40}>
-          <a href="works/commercial-facility-2025.html" className="works__photo">
+          <a href="works/kanda20250510.html" className="works__photo">
             <div className="works__photo__tag">FEATURED</div>
-            <img src="images/works/kanda20250510-cover.jpg" alt="商業施設の施工事例" />
+            <img src="images/works/kanda20250510-cover.jpg" alt="神田_店舗改修工事の施工事例" />
           </a>
         </FadeUp>
         <FadeUp delay={0.2} y={40}>
@@ -1000,7 +1007,7 @@ function Contact() {
           <FadeUp delay={0.1}>
             <div className="contact__card">
               <h3>By phone</h3>
-              <div className="contact__tel">048-201-6222</div>
+              <a className="contact__tel" href="tel:048-201-6222">048-201-6222</a>
               <div className="contact__hours">平日 8:00 〜 17:00 (日・祝定休)</div>
               <div style={{ marginTop: 24, fontSize: 13, color: 'var(--text-gray)', lineHeight: 1.9 }}>
                 お電話でのご相談を歓迎します。<br />
@@ -1049,7 +1056,7 @@ function Footer() {
             埼玉県新座市野火止2-4-14<br />
             営業時間 8:00 〜 17:00 ｜ 日・祝定休
           </p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="why-us.html">選ばれる理由</a>

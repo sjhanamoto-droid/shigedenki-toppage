@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"恵比寿_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"4ヶ月","budget":"3,000〜4,000万円","body":"大手ゼネコン様よりご依頼いただいた、商業施設の新築電気工事です。幹線工事から2次側配線全般、弱電工事まで一貫して担当しました。工期4ヶ月、3,000㎡規模の現場を、最大12名体制で対応。日報アプリでの進捗共有と定例ミーティングにより、元請け様との情報連携を密に行いました。","coverImage":"../images/works/ebisu20250306-cover.jpg","galleryImages":["../images/works/ebisu20250306-gallery-1.jpg","../images/works/ebisu20250306-gallery-2.jpg"],"prev":{"slug":"hunabashi20240524","title":"船橋_店舗改修工事"},"next":{"slug":"higashiikebukuro20240215","title":"東池袋_店舗改修工事"}};
+const pageData = {"title":"恵比寿_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"4ヶ月","budget":"3,000〜4,000万円","body":"店舗のLED化および照明改修工事です。半個室のボックス席を中心に、間接照明を主体とした照明計画へ切り替えました。天井は設備を見せる仕様のため、配管やダクトを避けながら器具と配線を納めています。\n\n## 施工内容\n\nボックス席の背もたれ上端に沿って、壁面を照らすLEDのライン照明を連続して納めました。コーナー部でも光が途切れないよう、器具のジョイント位置と見切り材の形状を調整しています。天井のレールにはスポットライトを配置し、テーブル面を照らす光を補いました。\n\n既存の照明回路を調光対応に改修し、時間帯に応じて明るさを切り替えられる構成としています。天井スピーカーへの配線もあわせて施工しました。\n\n## 間接照明の施工で気をつける点\n\n間接照明は、光源が見えないことが前提の照明です。座った姿勢からテープライトの粒が直接見えると、意図した仕上がりになりません。本件では、実際に着席して見え方を確認しながら、器具の取付高さと見切り材のかぶり寸法を決めています。\n\n連続したライン照明では、器具のつなぎ目に暗部が出やすくなります。ジョイント部の位置を席の中央からずらし、コーナーでは角度を調整して光の連続性を保ちました。調光時の色の変化も確認し、絞ったときに色味が揃うよう器具を選定しています。\n\n## 設備を見せる天井での納まり\n\nスプリンクラー配管、空調のフレキダクト、煙感知器など、消防と空調にかかわる設備は移設に制約があります。これらの位置を優先したうえで、照明器具と配線の経路を決めました。感知器の周囲は、散水と感知を妨げない離隔を確保しています。\n\n## 調光と色温度について\n\n飲食や接客をともなう店舗では、時間帯によって求められる明るさが変わります。開店前の清掃時には全体を明るく、営業時間帯は落ち着いた明るさに、といった切り替えが必要です。\n\n調光を前提とする場合、器具の選定時に調光方式を揃えておく必要があります。方式が異なる器具を同じ回路に混在させると、正常に調光できません。\n\n色温度も仕上がりを左右します。同じ空間に色温度の異なる器具が混在すると、光の色がそろわず雑然とした印象になります。本件では器具の色温度をそろえ、調光時の色の変化も確認したうえで選定しました。\n\n間接照明を主体とする計画は、図面だけでは仕上がりを判断しにくい部分があります。本件では施工途中で点灯確認の機会を設け、意図した見え方になっているかを確認しながら進めました。","coverImage":"../images/works/ebisu20250306-cover.jpg","galleryImages":["../images/works/ebisu20250306-gallery-1.jpg","../images/works/ebisu20250306-gallery-2.jpg"],"prev":{"slug":"hunabashi20240524","title":"船橋_店舗改修工事"},"next":{"slug":"higashiikebukuro20240215","title":"東池袋_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

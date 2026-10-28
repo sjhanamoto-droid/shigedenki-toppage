@@ -3,3 +3,5 @@ node_modules/
 .DS_Store
 .omc/
 .vercel
+dist/
+node_modules/.shige-ssr-*

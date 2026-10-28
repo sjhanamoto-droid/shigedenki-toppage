@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"船橋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"電気設備改修 / メンテナンス","location":"千葉県","duration":"","budget":"","body":"既存施設の電気設備改修・メンテナンス工事を実施しました。","coverImage":"../images/works/hunabashi20240524-cover.jpg","galleryImages":["../images/works/hunabashi20240524-gallery-1.jpg","../images/works/hunabashi20240524-gallery-2.jpg","../images/works/hunabashi20240524-gallery-3.jpg","../images/works/hunabashi20240524-gallery-4.jpg","../images/works/hunabashi20240524-gallery-5.jpg"],"prev":{"slug":"inucafe20240406","title":"大型複合施設いぬカフェ_店舗改修工事"},"next":{"slug":"ebisu20250306","title":"恵比寿_店舗改修工事"}};
+const pageData = {"title":"船橋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"電気設備改修 / メンテナンス","location":"千葉県","duration":"","budget":"","body":"既存施設の電気設備改修およびメンテナンス工事です。天井を解体して躯体を見せる計画に変更されたため、既設の隠蔽配線を露出仕様へ切り替える対応が中心となりました。\n\n## 施工内容\n\n天井にライティングレールを敷設し、スポットライトを配置しました。リング型のペンダント照明を吊り込み、壁際の下がり天井部にはダウンライトを納めています。既設の分電盤から新しい照明回路を分岐し、不要となった回路は端末処理のうえ盤内で整理しました。\n\n天井カセット形エアコンへの電源配線、コンセント回路の増設、スイッチ位置の変更もあわせて実施しています。\n\n## 隠蔽配線から露出配線への切り替え\n\n天井仕上げがある状態では、配線は天井内に隠れるため見た目の制約がありません。これを撤去して躯体現しにすると、配線と支持金具がそのまま見えることになります。\n\n既設配線をそのまま残すと、経路の乱れが意匠上そのまま露出してしまいます。本件では、見える範囲の配線を敷設し直し、支持間隔を揃え、曲がりの角度を統一しました。既設の配管で再利用できるものは活かし、経路が合わないものは撤去しています。\n\n## 改修工事で先に確認すること\n\n改修では、竣工図と現況が一致しないことが珍しくありません。過去の改修で回路が変更されていたり、図面にない配線が残っていたりします。本件でも着手前に分電盤の回路を一つずつ確認し、どの回路がどこを送っているかを実測で確かめたうえで、撤去してよい配線と残す配線を切り分けました。既存を扱う工事では、この確認の精度がそのまま安全性と工程の確実さに直結します。\n\n## メンテナンスで多いご相談\n\n既存施設からいただくご相談で多いのは、照明のちらつき、特定の回路だけ頻繁に遮断器が動作する、コンセントが使えなくなった、といった内容です。いずれも原因が一つとは限らず、器具の寿命、配線の劣化、容量不足のいずれもありえます。\n\n器具の交換だけで解決する場合もあれば、回路の構成そのものを見直す必要がある場合もあります。症状だけで判断せず、分電盤の状態と実際の使用状況を確認したうえで原因を切り分けることが確実です。\n\n本件でも、改修に先立って既設設備の状態を確認し、更新が必要な範囲を整理してから着手しました。\n\n改修工事では、着手してから想定外の状況が判明することがあります。発見した内容はその都度報告し、対応方針を確認したうえで進めました。既存を扱う以上、この積み重ねが手戻りを防ぐ確実な方法だと考えています。","coverImage":"../images/works/hunabashi20240524-cover.jpg","galleryImages":["../images/works/hunabashi20240524-gallery-1.jpg","../images/works/hunabashi20240524-gallery-2.jpg","../images/works/hunabashi20240524-gallery-3.jpg","../images/works/hunabashi20240524-gallery-4.jpg","../images/works/hunabashi20240524-gallery-5.jpg"],"prev":{"slug":"inucafe20240406","title":"大型複合施設いぬカフェ_店舗改修工事"},"next":{"slug":"ebisu20250306","title":"恵比寿_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

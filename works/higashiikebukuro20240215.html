@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"東池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"弱電工事 / LAN配線","location":"東京都","duration":"","budget":"","body":"店舗内装に伴う弱電工事を実施。LAN配線やセキュリティ設備の施工を行いました。","coverImage":"../images/works/higashiikebukuro20240215-cover.jpg","galleryImages":["../images/works/higashiikebukuro20240215-gallery-1.jpg","../images/works/higashiikebukuro20240215-gallery-2.jpg","../images/works/higashiikebukuro20240215-gallery-3.jpg","../images/works/higashiikebukuro20240215-gallery-4.jpg"],"prev":{"slug":"ebisu20250306","title":"恵比寿_店舗改修工事"},"next":{"slug":"kanda20250416","title":"神田_店舗改修工事"}};
+const pageData = {"title":"東池袋_店舗改修工事","tag":"STORE","type":"renovation","year":"2024","scale":"改修案件","scope":"弱電工事 / LAN配線","location":"東京都","duration":"","budget":"","body":"店舗の内装改修にともなう弱電工事です。LAN配線と映像設備まわりの配線を担当しました。大型モニターを設置する計画のため、電源と信号を同じ壁面で処理する必要があり、配線の取り回しを先行して検討しています。\n\n## 施工内容\n\n壁面に大型モニターを設置し、背面へ電源と映像信号の配線を立ち上げました。配線は壁内に隠蔽し、機器の背面で接続を完結させています。客席のボックス席にはLAN配線を敷設し、店内の情報端末に対応しました。\n\n照明側では、石積み調の壁面の上下に間接照明を納め、ベンチシート下にも建築化照明を仕込んでいます。天井のレールにはペンダント型の器具を配置しました。天井カセット形エアコンへの電源配線もあわせて施工しています。\n\n## LAN配線について\n\nLAN配線は、通しさえすれば通信できるというものではありません。ケーブルの許容曲げ半径を下回る急な曲げ、電力線との並走、成端時のより戻しすぎといった施工の粗さが、そのまま通信速度の低下や断続的な切断につながります。\n\n本件では、電力線と離隔を確保した経路を選び、曲げ部には緩やかな半径を持たせました。成端後は施工品質を確認したうえで機器へ接続しています。\n\n## 映像設備まわりの配線\n\nモニターの設置位置は、内装が仕上がってから微調整されることがあります。配線を壁内で固定してしまうと、位置の変更に対応できません。本件では壁内に余長を確保し、開口位置の調整に対応できる状態で仕上げ工事へ引き渡しました。将来の機器更新を見込み、同経路に予備の配管も通しています。\n\n## 弱電と強電を分けて考える\n\n電気工事は、電力を送る強電と、情報や信号を扱う弱電に分かれます。同じ現場で同時に施工されることが多い一方、求められる条件は異なります。\n\n強電の配線は、容量と安全性が最優先です。弱電の配線は、ノイズの影響を受けにくい経路と、将来の機器更新に対応できる余裕が重要になります。両者を近接して並走させると、電力線から生じるノイズが通信に影響することがあります。\n\n本件では、天井内および壁内での経路を計画段階で分け、やむを得ず交差する箇所は直角に近い角度で通すことで影響を抑えました。\n\n弱電設備は、施工直後に問題がなくても、運用が始まってから不具合が表面化することがあります。本件では成端部の品質を確認したうえで引き渡し、経路図を残して以降の保守に備えました。壁内に通した予備配管には呼び線を残し、次回の更新時にケーブルを引き直せるようにしています。","coverImage":"../images/works/higashiikebukuro20240215-cover.jpg","galleryImages":["../images/works/higashiikebukuro20240215-gallery-1.jpg","../images/works/higashiikebukuro20240215-gallery-2.jpg","../images/works/higashiikebukuro20240215-gallery-3.jpg","../images/works/higashiikebukuro20240215-gallery-4.jpg"],"prev":{"slug":"ebisu20250306","title":"恵比寿_店舗改修工事"},"next":{"slug":"kanda20250416","title":"神田_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}

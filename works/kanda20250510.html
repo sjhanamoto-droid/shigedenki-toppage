@@ -9,6 +9,12 @@
   gtag('js', new Date());
 
   gtag('config', 'G-SRNYH020JZ');
+
+  /* 電話ボタン（tel: リンク）のタップ → GA4 イベント tel_click（全社共通） */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) gtag('event', 'tel_click', { link_url: a.getAttribute('href') });
+  }, true);
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +106,7 @@ function Footer() {
         <div>
           <div className="footer__logo"><img src="../images/logo.svg" alt="株式会社シゲ電気" /></div>
           <p className="footer__address">〒352-0012<br />埼玉県新座市野火止2-4-14<br />営業時間 8:00 〜 17:00 ｜ 日・祝定休</p>
-          <div className="footer__tel">048-201-6222</div>
+          <a className="footer__tel" href="tel:048-201-6222">048-201-6222</a>
         </div>
         <div className="footer__nav">
           <a href="../why-us.html">選ばれる理由</a>
@@ -141,7 +147,7 @@ function BottomCTA({ title }) {
 
 
 /* ========== Page Data (injected by build script) ========== */
-const pageData = {"title":"神田_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"既存店舗のLED化および改修工事を実施。省エネと照明品質の向上を実現しました。","coverImage":"../images/works/kanda20250510-cover.jpg","galleryImages":["../images/works/kanda20250510-gallery-1.jpg","../images/works/kanda20250510-gallery-2.jpg","../images/works/kanda20250510-gallery-3.jpg"],"prev":{"slug":"ikebukuro20240308","title":"池袋_店舗改修工事"},"next":{"slug":"inucafe20240406","title":"大型複合施設いぬカフェ_店舗改修工事"}};
+const pageData = {"title":"神田_店舗改修工事","tag":"STORE","type":"renovation","year":"2025","scale":"改修案件","scope":"LED化 / 照明改修","location":"東京都","duration":"","budget":"","body":"パーティルームを備えた店舗の改修工事です。既存照明のLED化とあわせ、演出照明の改修を担当しました。客席の常時照明と、フロア演出のための照明を別系統で構成しています。\n\n## 施工内容\n\n中央の通路には発光床を設置し、パネルごとに色が変化するよう配線しました。壁面にはRGBのLEDラインを走らせ、天井のグリッドには演出用の照明器具とミラーボールを取り付けています。ボックス席の座面下と背面には間接照明を仕込み、常時点灯させる落ち着いた明るさを確保しました。\n\n壁掛けモニターへの電源と信号線、天井スピーカーへの配線もあわせて施工しています。\n\n## 演出照明の回路構成\n\n演出照明は、消費電力が大きく、調光や調色の制御信号を別に必要とします。客席の一般照明と同じ回路にまとめると、演出を切り替えるたびに客席の明るさが揺らいだり、ノイズの影響を受けたりします。\n\n本件では、一般照明、間接照明、演出照明を系統ごとに分け、制御用の配線を電力線から離して敷設しました。発光床のように人が上を歩く箇所は、配線の保護と結線部の防水処理が欠かせません。点検や更新を見込んで、パネル単位で切り離せる構成としています。\n\n## LED化にあわせた見直し\n\n既存器具をLEDに置き換える際は、器具の重量や発熱が変わるため、取付方法と配線の余長を見直す必要があります。調光を行う場合は、調光器と光源の組み合わせによってちらつきが出ることがあり、実機での点灯確認が欠かせません。本件でも器具を仮設置した状態で調光域を確認し、下限側で不点灯やちらつきが出ないことを確かめてから本設置に移りました。\n\n## 保守を見込んだ構成\n\n演出照明は、一般照明に比べて点灯時間あたりの負荷が大きく、器具の交換頻度も高くなります。発光床のように人が上を歩く箇所は、外部からの衝撃や水分の影響も受けます。\n\n施工時に一体化して納めてしまうと、一部の不具合でも広い範囲を解体する必要が生じます。本件では、パネルや器具の単位で切り離せる構成とし、点検口の位置も交換作業を想定して決めました。\n\n店舗の演出照明は、営業への影響を抑えて短時間で復旧できることが重要です。施工時点で保守のしやすさを織り込んでおくことが、長期的な維持費用に効いてきます。\n\n演出照明をともなう店舗では、完成後に運用しながら明るさや色の調整を求められることがあります。本件でも、引き渡し後の調整を見込み、制御の設定を変更できる形で構成を整えました。","coverImage":"../images/works/kanda20250510-cover.jpg","galleryImages":["../images/works/kanda20250510-gallery-1.jpg","../images/works/kanda20250510-gallery-2.jpg","../images/works/kanda20250510-gallery-3.jpg"],"prev":{"slug":"ikebukuro20240308","title":"池袋_店舗改修工事"},"next":{"slug":"inucafe20240406","title":"大型複合施設いぬカフェ_店舗改修工事"}};
 
 
 function WorkDetail() {
@@ -206,7 +212,11 @@ function WorkDetail() {
         {d.body && (
           <FadeUp>
             <div className="work-detail__body">
-              <p>{d.body}</p>
+              {d.body.split('\n').map(l => l.trim()).filter(Boolean).map((line, i) =>
+                line.startsWith('## ')
+                  ? <h2 key={i} className="work-detail__body__heading">{line.slice(3)}</h2>
+                  : <p key={i}>{line}</p>
+              )}
             </div>
           </FadeUp>
         )}
